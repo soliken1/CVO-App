@@ -1,11 +1,34 @@
 import "./App.css";
+import { useState, useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import { auth } from "./configs/firebaseConfigs.js";
+import Register from "./screens/RegisterScreen.jsx";
+import Login from "./screens/LoginScreen.jsx";
+import UserDashboard from "./screens/UserDashboard.jsx";
+import AdminDashboard from "./screens/AdminDashboard.jsx";
 
-function App() {
+export default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   return (
-    <div className="w-screen h-screen flex justify-center items-center">
-      <label className="font-bold text-6xl">Welcome to CVO</label>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/register" element={<Register />} />
+        <Route path="/" element={<Login />} />
+        {isLoggedIn ? (
+          <>
+            <Route path="/dashboard" element={<UserDashboard />} />
+            <Route path="/admindashboard" element={<AdminDashboard />} />
+          </>
+        ) : (
+          <Route path="*" element={<Navigate to="/" />} />
+        )}
+      </Routes>
+    </Router>
   );
 }
-
-export default App;
