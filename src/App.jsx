@@ -14,7 +14,6 @@ import AdminDashboard from "./screens/AdminDashboard.jsx";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [getUser, setUser] = useState(null);
 
   useEffect(() => {
