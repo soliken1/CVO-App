@@ -14,16 +14,47 @@ import AdminDashboard from "./screens/AdminDashboard.jsx";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [getUser, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setIsLoggedIn(true);
+        setUser(user);
+      } else {
+        setIsLoggedIn(false);
+        setUser(null);
+      }
+      setIsLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
 
   return (
     <Router>
       <Routes>
         <Route path="/register" element={<Register />} />
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Login onLogin={handleLogin} />} />
         {isLoggedIn ? (
           <>
-            <Route path="/dashboard" element={<UserDashboard />} />
-            <Route path="/admindashboard" element={<AdminDashboard />} />
+            <Route
+              path="/dashboard"
+              element={<UserDashboard onLogout={handleLogout} />}
+            />
+            <Route
+              path="/admindashboard"
+              element={<AdminDashboard onLogout={handleLogout} />}
+            />
           </>
         ) : (
           <Route path="*" element={<Navigate to="/" />} />
