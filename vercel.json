@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    { "source": "/register", "destination": "/" },
+    { "source": "/dashboard", "destination": "/" },
+    { "source": "/admindashboard", "destination": "/" },
+    { "source": "/:path*", "destination": "/" }
+  ]
+}
