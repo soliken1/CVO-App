@@ -25,7 +25,6 @@ export default function App() {
         setIsLoggedIn(false);
         setUser(null);
       }
-      setIsLoading(false);
     });
 
     return () => unsubscribe();

@@ -1,10 +1,12 @@
 import React from "react";
+import Navbar from "../components/Navbar";
 
 const UserDashboard = () => {
   return (
-    <div>
-      <h1>User Dashboard</h1>
-      <p>Welcome to your user dashboard!</p>
+    <div className="min-h-screen w-screen h-auto overflow-y-auto relative px-6 py-8">
+      <label className="text-3xl font-semibold">Dashboard</label>
+
+      <Navbar />
     </div>
   );
 };
