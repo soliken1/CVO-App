@@ -9,8 +9,8 @@ import {
 import { auth } from "./configs/firebaseConfigs.js";
 import Register from "./screens/RegisterScreen.jsx";
 import Login from "./screens/LoginScreen.jsx";
-import UserDashboard from "./screens/UserDashboard.jsx";
-import AdminDashboard from "./screens/AdminDashboard.jsx";
+import UserDashboard from "./screens/UserDashboardScreen.jsx";
+import AdminDashboard from "./screens/AdminDashboardScreen.jsx";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
