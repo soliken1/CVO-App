@@ -11,6 +11,7 @@ import Register from "./screens/RegisterScreen.jsx";
 import Login from "./screens/LoginScreen.jsx";
 import UserDashboard from "./screens/UserDashboardScreen.jsx";
 import AdminDashboard from "./screens/AdminDashboardScreen.jsx";
+import SettingsScreen from "./screens/SettingsScreen.jsx";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -41,17 +42,41 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/register" element={<Register />} />
-        <Route path="/" element={<Login onLogin={handleLogin} />} />
+        <Route
+          path="/register"
+          element={isLoggedIn ? <Navigate to="/dashboard" /> : <Register />}
+        />
+        <Route
+          path="/"
+          element={
+            isLoggedIn ? (
+              <Navigate to="/dashboard" />
+            ) : (
+              <Login onLogin={handleLogin} />
+            )
+          }
+        />
         {isLoggedIn ? (
           <>
             <Route
               path="/dashboard"
-              element={<UserDashboard onLogout={handleLogout} />}
+              element={
+                <UserDashboard getUser={getUser} onLogout={handleLogout} />
+              }
             />
+
+            <Route
+              path="/settings"
+              element={
+                <SettingsScreen getUser={getUser} onLogout={handleLogout} />
+              }
+            />
+
             <Route
               path="/admindashboard"
-              element={<AdminDashboard onLogout={handleLogout} />}
+              element={
+                <AdminDashboard getUser={getUser} onLogout={handleLogout} />
+              }
             />
           </>
         ) : (

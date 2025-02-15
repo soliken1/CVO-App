@@ -5,6 +5,8 @@ import { auth } from "../configs/firebaseConfigs";
 import { Link } from "react-router-dom";
 import SplashScreen from "./SplashScreen";
 import Logo from "../assets/Logo.png";
+import { useCookies } from "react-cookie";
+import { doc } from "firebase/firestore";
 
 const LoginScreen = ({ onLogin }) => {
   const navigate = useNavigate();
@@ -27,6 +29,7 @@ const LoginScreen = ({ onLogin }) => {
   const login = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
+
       onLogin();
       navigate("/dashboard");
     } catch (error) {

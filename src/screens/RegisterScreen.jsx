@@ -4,18 +4,55 @@ import { Link } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../configs/firebaseConfigs.js";
+import { auth, db } from "../configs/firebaseConfigs.js";
+import { doc, setDoc } from "firebase/firestore";
 
 const RegisterScreen = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    tempUsername: "",
+  });
+
   const navigate = useNavigate();
 
-  const register = async () => {
+  const handleRegisterUser = async (event) => {
+    event.preventDefault();
+
+    if (!formData.email.trim() || !formData.password.trim()) {
+      setErrorMessage("Please fill out all fields.");
+      return;
+    }
+
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      navigate("/login");
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+      const user = userCredential.user;
+
+      const tempUsername = formData.email.includes("@")
+        ? formData.email.split("@")[0]
+        : "user";
+
+      const userData = {
+        email: formData.email,
+        password: formData.password,
+        tempUsername,
+      };
+
+      const docRef = doc(db, "users", user.uid);
+      await setDoc(docRef, userData);
+
+      setFormData({
+        email: "",
+        password: "",
+        tempUsername: "",
+      });
+
+      navigate("/");
     } catch (err) {
       setErrorMessage(null);
       if (err.code === "auth/email-already-in-use") {
@@ -27,8 +64,12 @@ const RegisterScreen = () => {
       } else {
         setErrorMessage("Please Input Appropriate Fields");
       }
-      console.log(err);
+      console.error(err);
     }
+  };
+
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   return (
@@ -38,23 +79,31 @@ const RegisterScreen = () => {
         <label className="text-2xl font-bold">Welcome!</label>
         <label className="text-lg font-semibold">Sign Up for an Account</label>
       </div>
-      <div className="flex flex-col gap-5 w-2/3">
+      <form className="flex flex-col gap-5 w-2/3" onSubmit={handleRegisterUser}>
         <div className="flex flex-col gap-1">
           <label className="text-sm">Email</label>
           <input
+            id="email"
+            name="email"
             type="email"
             className="border-[#050419] text-xs p-2 border rounded-lg placeholder:text-xs"
             placeholder="youremail@sample.com"
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleInputChange}
+            value={formData.email}
+            required={true}
           />
         </div>
         <div className="flex flex-col gap-1">
           <label className="text-sm">Password</label>
           <input
+            id="password"
+            name="password"
             type="password"
             className="border-[#050419] border rounded-lg p-2  text-xs placeholder:text-xs"
             placeholder="*****"
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handleInputChange}
+            value={formData.password}
+            required={true}
           />
         </div>
         <div className="flex flex-col gap-1">
@@ -63,6 +112,7 @@ const RegisterScreen = () => {
             type="password"
             className="border-[#050419] border rounded-lg p-2  text-xs placeholder:text-xs"
             placeholder="*****"
+            required={true}
           />
         </div>
         {errorMessage && (
@@ -71,7 +121,6 @@ const RegisterScreen = () => {
         <button
           type="submit"
           className="bg-[#050419] py-2 rounded-lg text-white"
-          onClick={register}
         >
           Register
         </button>
@@ -82,7 +131,7 @@ const RegisterScreen = () => {
           </Link>
           <label className="text-[#050419] text-xs mt-5">Login as Guest</label>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

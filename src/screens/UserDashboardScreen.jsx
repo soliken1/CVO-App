@@ -1,22 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Ribbon from "../components/Ribbon";
 import ReactWeather, { useOpenWeather } from "react-open-weather";
 import { MdOutlinePets } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";
+import fetchUser from "../hooks/fetchUser";
 
-const UserDashboard = () => {
+const UserDashboard = ({ getUser }) => {
   const { data, isLoading, errorMessage } = useOpenWeather({
-    key: "25f53aa22bf3d78ea8a569cb30b04337",
+    key: import.meta.env.VITE_OPEN_WEATHER_KEY,
     lat: "10.3157",
     lon: "123.8854",
     lang: "en",
     unit: "metric",
   });
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    const fetchAndSetUserData = async () => {
+      try {
+        const data = await fetchUser(getUser.uid);
+        setUserData(data);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    fetchAndSetUserData();
+  }, []);
+
   return (
     <div className="min-h-screen w-screen h-auto overflow-y-auto relative px-6 py-8">
-      <Ribbon />
+      <Ribbon userData={userData} />
       <div className="w-full flex flex-col h-auto mt-5 gap-5">
         <div className="w-full h-40 rounded-lg bg-gradient-to-br from-[#141065] to-[#050419]">
           <ReactWeather
