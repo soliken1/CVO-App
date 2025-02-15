@@ -7,6 +7,7 @@ import SplashScreen from "./SplashScreen";
 import Logo from "../assets/Logo.png";
 import { useCookies } from "react-cookie";
 import { doc } from "firebase/firestore";
+import ChatComponent from "../components/ChatComponent";
 
 const LoginScreen = ({ onLogin }) => {
   const navigate = useNavigate();
@@ -48,7 +49,8 @@ const LoginScreen = ({ onLogin }) => {
   };
 
   return (
-    <div className="w-screen h-screen flex flex-col justify-center items-center gap-5 duration-300">
+    <div className="w-screen h-screen flex flex-col justify-center items-center gap-5 duration-300 relative">
+      <ChatComponent />
       <div className="flex flex-col items-center gap-1">
         <img src={Logo} className="w-32 h-32" />
         <label className="text-2xl font-bold">Welcome!</label>
