@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <div className="absolute bottom-0 left-0 h-auto w-full">
+    <div className="fixed bottom-0 left-0 h-auto w-full">
       <div className="flex justify-evenly gap-1 items-center py-3 bg-[#050419] ">
         <Link
           to="/dashboard"
