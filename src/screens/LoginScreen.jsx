@@ -30,23 +30,28 @@ const LoginScreen = ({ onLogin }) => {
   const login = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-
+      
       onLogin();
       navigate("/dashboard");
     } catch (error) {
       setErrorMessage(null);
+  
       if (error.code === "auth/email-already-in-use") {
         setErrorMessage("Email already in use");
       } else if (error.code === "auth/missing-password") {
-        setErrorMessage("Password is Empty");
+        setErrorMessage("Password is empty");
       } else if (error.code === "auth/missing-email") {
-        setErrorMessage("Email is Empty");
-      } else {
-        setErrorMessage("Please Input Appropriate Fields");
+        setErrorMessage("Email is empty");
+      } else if (error.code === "auth/invalid-credential") {
+        setErrorMessage("Invalid Credentials, Please try again.");
+      } else{
+        setErrorMessage("Cannot logged-in, Please try again.");
       }
+      
       console.log(error);
     }
   };
+  
 
   return (
     <div className="w-screen h-screen flex flex-col justify-center items-center gap-5 duration-300 relative">
