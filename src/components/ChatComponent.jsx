@@ -62,7 +62,7 @@ const ChatComponent = () => {
       {/* Floating Chat Icon */}
       <button
         onClick={handleChatOpen}
-        className="fixed bottom-5 right-5 bg-[#050419] text-white p-4 rounded-full shadow-lg hover:bg-[#050419] transition"
+        className="fixed bottom-24 right-6  duration-1000 animate-pulse bg-[#050419] text-white p-4 rounded-full shadow-lg hover:bg-[#050419] transition"
       >
         💬
       </button>
@@ -74,7 +74,11 @@ const ChatComponent = () => {
           <div className="bg-[#050419] text-white p-3 flex justify-between items-center">
             {/* Bot Image */}
             <div className="flex items-center gap-2">
-              <img src={Furbot_Logo} alt="Furbot Logo" className="w-8 h-8 rounded-full" />
+              <img
+                src={Furbot_Logo}
+                alt="Furbot Logo"
+                className="w-8 h-8 rounded-full"
+              />
               <span>CVO Info Bot (Furbot)</span>
             </div>
 

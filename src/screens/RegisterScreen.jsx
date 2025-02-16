@@ -39,7 +39,6 @@ const RegisterScreen = () => {
 
       const userData = {
         email: formData.email,
-        password: formData.password,
         tempUsername,
       };
 
