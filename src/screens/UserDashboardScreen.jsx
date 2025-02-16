@@ -7,17 +7,45 @@ import { FaArrowRight } from "react-icons/fa";
 import fetchUser from "../hooks/fetchUser";
 import DateDisplay from "../components/DateDisplay";
 import ChatComponent from "../components/ChatComponent";
+import AddPetModal from "../components/AddPetModal";
+import { db } from "../configs/firebaseConfigs";
+import { collection, query, where, getDocs } from "firebase/firestore";
+
 const UserDashboard = ({ getUser }) => {
   const [userData, setUserData] = useState(null);
   const [weatherData, setWeatherData] = useState(null);
+  const [pets, setPets] = useState([]);
 
   useEffect(() => {
     const fetchAndSetUserData = async () => {
       try {
-        const data = await fetchUser(getUser.uid);
-        setUserData(data);
+        const data = await fetchUser(getUser?.uid);
+        if (data) {
+          setUserData(data);
+        } else {
+          console.error("Failed to fetch user data.");
+        }
       } catch (error) {
-        console.error("Error:", error);
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    const fetchUserPets = async () => {
+      if (!getUser?.uid) return;
+
+      try {
+        const petsRef = collection(db, "pets");
+        const q = query(petsRef, where("ownerId", "==", getUser.uid));
+        const querySnapshot = await getDocs(q);
+
+        const petsList = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        setPets(petsList);
+      } catch (error) {
+        console.error("Error fetching pets:", error);
       }
     };
 
@@ -44,15 +72,15 @@ const UserDashboard = ({ getUser }) => {
             temp_max: tempMaxCelsius,
           },
         });
-        console.log("Weather data:", weatherData);
       } catch (error) {
         console.error("Error fetching weather data:", error);
       }
     };
 
     fetchAndSetUserData();
+    fetchUserPets();
     fetchWeather();
-  }, []);
+  }, [getUser?.uid]);
 
   return (
     <div className="min-h-screen w-screen h-auto overflow-y-auto relative px-6 py-8">
@@ -89,20 +117,38 @@ const UserDashboard = ({ getUser }) => {
             />
           </div>
         </div>
+
+        {/* Pets Section */}
         <div className="w-full h-auto flex flex-col gap-3">
           <label className="font-semibold text-xl">Your Pets</label>
           <div className="flex flex-col gap-2 h-auto w-full">
-            <Link className="w-full h-20 gap-5 flex items-center px-4 shadow-lg rounded-xl">
-              <MdOutlinePets className="h-10 w-10" />
-              <div className="flex flex-col w-9/12">
-                <label className="text-xs">Luke</label>
-                <label className="text-xs text-gray-400">Siamese Cat</label>
-              </div>
-              <FaArrowRight />
-            </Link>
+            {pets.length > 0 ? (
+              pets.map((pet) => (
+                <Link
+                  key={pet.id}
+                  to={`/pet/${pet.id}`}
+                  className="w-full h-20 flex items-center px-4 shadow-lg rounded-xl bg-white"
+                >
+                  <img
+                    src={pet.petImage}
+                    alt={pet.petName}
+                    className="h-16 w-16 rounded-full object-cover border border-gray-300"
+                  />
+                  <div className="flex flex-col w-9/12 pl-3">
+                    <label className="text-sm font-bold">{pet.petName}</label>
+                    <label className="text-xs text-gray-400">{pet.petBreed}</label>
+                  </div>
+                  <FaArrowRight />
+                </Link>
+              ))
+            ) : (
+              <p className="text-gray-500 text-sm">No pets found.</p>
+            )}
           </div>
         </div>
       </div>
+
+      {userData && <AddPetModal getUser={userData} />}
       <Navbar />
     </div>
   );

@@ -72,6 +72,7 @@ const RegisterScreen = () => {
         : "user";
 
       const userData = {
+        uid: user.uid,
         email: formData.email,
         tempUsername,
       };
