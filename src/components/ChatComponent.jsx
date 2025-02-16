@@ -64,7 +64,11 @@ const ChatComponent = () => {
         onClick={handleChatOpen}
         className="fixed bottom-24 right-6  duration-1000 animate-pulse bg-[#050419] text-white p-4 rounded-full shadow-lg hover:bg-[#050419] transition"
       >
-        💬
+       <img
+                src={Furbot_Logo}
+                alt="Furbot Logo"
+                className="w-12 h-12 rounded-full"
+              />
       </button>
 
       {/* Chat Box */}
