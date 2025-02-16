@@ -2,22 +2,22 @@ import React, { useEffect, useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
 
 const Ribbon = ({ userData }) => {
-  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
   const [profile, setProfile] = useState("");
   const [isLoading, setisLoading] = useState(true);
 
   useEffect(() => {
     const displayUser = async () => {
       if (!userData) {
-        setUsername("");
+        setName("");
         return;
       }
 
-      if (userData.username) {
-        setUsername(userData.username);
+      if (userData.name) {
+        setName(userData.name);
         setisLoading(false);
       } else {
-        setUsername(userData.tempUsername || "Guest");
+        setName(userData.tempName || "Guest");
         setisLoading(false);
       }
 
@@ -40,7 +40,7 @@ const Ribbon = ({ userData }) => {
           </>
         ) : (
           <>
-            <label className="font-semibold">{username}</label>
+            <label className="font-semibold">{name}</label>
             <img
               src={profile}
               className="h-10 w-10  object-cover rounded-full"

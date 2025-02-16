@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../configs/firebaseConfigs";
+import { auth, db } from "../configs/firebaseConfigs"; // Import db from firebaseConfigs
 import { Link } from "react-router-dom";
 import SplashScreen from "./SplashScreen";
 import Logo from "../assets/Logo.png";
 import { useCookies } from "react-cookie";
-import { doc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore"; // Import setDoc from firebase/firestore
 import ChatComponent from "../components/ChatComponent";
 
 const LoginScreen = ({ onLogin }) => {
@@ -29,8 +29,16 @@ const LoginScreen = ({ onLogin }) => {
 
   const login = async () => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Save activity in Firestore
+      const activityRef = doc(db, "activity", user.uid);
+      await setDoc(activityRef, {
+        accessDate: new Date(),
+        action: "login",
+      });
+
       onLogin();
       navigate("/dashboard");
     } catch (error) {
@@ -52,7 +60,6 @@ const LoginScreen = ({ onLogin }) => {
     }
   };
   
-
   return (
     <div className="w-screen h-screen flex flex-col justify-center items-center gap-5 duration-300 relative">
       <ChatComponent />

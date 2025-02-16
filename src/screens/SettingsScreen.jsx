@@ -11,7 +11,9 @@ const SettingsScreen = ({ getUser }) => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [newPassword, setNewPassword] = useState("");
-  const [newUsername, setNewUsername] = useState("");
+  const [newName, setNewName] = useState("");
+  const [newAddress, setNewAddress] = useState("");
+  const [newMobileNumber, setNewMobileNumber] = useState("");
   const [newImage, setNewImage] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
@@ -55,26 +57,78 @@ const SettingsScreen = ({ getUser }) => {
     }
   };
 
-  const handleUsernameUpdate = async () => {
+  const handleNameUpdate = async () => {
     try {
-      if (!newUsername) {
-        alert("Please enter a new username.");
+      if (!newName) {
+        alert("Please enter your name.");
         return;
       }
 
       const userDocRef = doc(db, "users", getUser.uid);
 
       await updateDoc(userDocRef, {
-        username: newUsername,
-        tempUsername: deleteField(),
+        name: newName,
+        tempName: deleteField(),
       });
 
-      alert("Username updated successfully.");
+      alert("Name updated successfully.");
       window.location.reload();
-      setNewUsername("");
+      setNewName("");
     } catch (error) {
-      console.error("Error updating username:", error);
-      alert("Failed to update username. Please try again.");
+      console.error("Error updating name:", error);
+      alert("Failed to update name. Please try again.");
+    }
+  };
+
+  const handleAddressUpdate = async () => {
+    try {
+      if (!newAddress) {
+        alert("Please enter your address.");
+        return;
+      }
+
+      const userDocRef = doc(db, "users", getUser.uid);
+
+      await updateDoc(userDocRef, {
+        address: newAddress,
+        tempAddress: deleteField(),
+      });
+
+      alert("Address updated successfully.");
+      window.location.reload();
+      setNewName("");
+    } catch (error) {
+      console.error("Error updating address:", error);
+      alert("Failed to update address. Please try again.");
+    }
+  };
+
+  const handleMobileNumberUpdate = async () => {
+    try {
+      if (!newMobileNumber) {
+        alert("Please enter your address.");
+        return;
+      }
+
+      const numericRegex = /^[0-9]+$/;
+      if (!numericRegex.test(newMobileNumber)) {
+        alert("Please enter a valid mobile number containing only digits.");
+        return;
+      }
+
+      const userDocRef = doc(db, "users", getUser.uid);
+
+      await updateDoc(userDocRef, {
+        mobileNumber: newMobileNumber,
+        tempMobileNumber: deleteField(),
+      });
+
+      alert("Mobile Number updated successfully.");
+      window.location.reload();
+      setNewName("");
+    } catch (error) {
+      console.error("Error updating Mobile Number:", error);
+      alert("Failed to update Mobile Number. Please try again.");
     }
   };
 
@@ -145,25 +199,66 @@ const SettingsScreen = ({ getUser }) => {
           </div>
         </div>
 
-        {/* Update Username */}
+        {/* Update Name */}
         <div className="flex flex-col gap-4">
-          <label className="font-bold">Change Username</label>
+          <label className="font-bold">Change Name</label>
           <div className="w-full h-auto flex flex-row gap-2">
             <input
               type="text"
-              value={newUsername}
-              onChange={(e) => setNewUsername(e.target.value)}
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
               className="border border-gray-300 w-10/12 p-2 rounded-md"
-              placeholder={userData?.username}
+              placeholder={userData?.name}
             />
             <button
-              onClick={handleUsernameUpdate}
+              onClick={handleNameUpdate}
               className="bg-[#050419] text-white font-bold px-4 py-2 rounded-md"
             >
               ✓
             </button>
           </div>
         </div>
+
+                {/* Update Address */}
+                <div className="flex flex-col gap-4">
+          <label className="font-bold">Change Address</label>
+          <div className="w-full h-auto flex flex-row gap-2">
+            <input
+              type="text"
+              value={newAddress}
+              onChange={(e) => setNewAddress(e.target.value)}
+              className="border border-gray-300 w-10/12 p-2 rounded-md"
+              placeholder={userData?.address}
+            />
+            <button
+              onClick={handleAddressUpdate}
+              className="bg-[#050419] text-white font-bold px-4 py-2 rounded-md"
+            >
+              ✓
+            </button>
+          </div>
+        </div>
+
+            {/* Update Mobile Number */}
+            <div className="flex flex-col gap-4">
+          <label className="font-bold">Change Mobile Number</label>
+          <div className="w-full h-auto flex flex-row gap-2">
+            <input
+              type="text"
+              value={newMobileNumber}
+              onChange={(e) => setNewMobileNumber(e.target.value)}
+              className="border border-gray-300 w-10/12 p-2 rounded-md"
+              placeholder={userData?.mobileNumber}
+            />
+            <button
+              onClick={handleMobileNumberUpdate}
+              className="bg-[#050419] text-white font-bold px-4 py-2 rounded-md"
+            >
+              ✓
+            </button>
+          </div>
+        </div>
+
 
         {/* Update Password */}
         <div className="flex flex-col gap-4">
