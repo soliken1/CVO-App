@@ -21,20 +21,7 @@ const Navbar = () => {
           <MdOutlinePets className="h-6 w-6 text-white" />
           <label className="text-sm text-white">Pets</label>
         </Link>
-        <Link
-          to="/infochat"
-          className="flex flex-col items-center gap-1 w-[74px]"
-        >
-          <MdOutlineInfo className="h-6 w-6 text-white" />
-          <label className="text-sm text-white">Info</label>
-        </Link>
-        <Link
-          to="/alerts"
-          className="flex flex-col items-center gap-1 w-[74px]"
-        >
-          <IoIosNotifications className="h-6 w-6 text-white" />
-          <label className="text-sm text-white">Alerts</label>
-        </Link>
+  
         <Link
           to="/settings"
           className="flex flex-col items-center gap-1 w-[74px]"
