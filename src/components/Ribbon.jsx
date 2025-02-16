@@ -3,6 +3,7 @@ import { FaUserCircle } from "react-icons/fa";
 
 const Ribbon = ({ userData }) => {
   const [username, setUsername] = useState("");
+  const [profile, setProfile] = useState("");
   const [isLoading, setisLoading] = useState(true);
 
   useEffect(() => {
@@ -19,20 +20,33 @@ const Ribbon = ({ userData }) => {
         setUsername(userData.tempUsername || "Guest");
         setisLoading(false);
       }
+
+      setProfile(userData.profileImage);
     };
 
     displayUser();
   }, [userData]);
 
   return (
-    <div className="w-full h-12 flex justify-end">
-      <div className="flex flex-row gap-4 items-center">
+    <div className="w-full h-12 flex justify-end ">
+      <div className="flex flex-row gap-4 justify-center items-center shadow-md rounded-full px-6">
         {isLoading ? (
-          <label className="w-28 h-4 rounded-full animate-pulse duration-300 bg-[#050419]"></label>
+          <>
+            <label className="w-28 h-4 rounded-full animate-pulse duration-300 bg-[#050419]"></label>
+            <img
+              src={profile}
+              className="h-10 w-10 animate-pulse duration-300 bg-[#050419] rounded-full"
+            />
+          </>
         ) : (
-          <label className="font-semibold">{username}</label>
+          <>
+            <label className="font-semibold">{username}</label>
+            <img
+              src={profile}
+              className="h-10 w-10  object-cover rounded-full"
+            />
+          </>
         )}
-        <FaUserCircle className="h-10 w-10" />
       </div>
     </div>
   );
