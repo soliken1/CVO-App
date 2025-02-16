@@ -1,1 +1,20 @@
 @import "tailwindcss";
+
+@font-face {
+  font-family: "Roboto";
+  src: url("./fonts/Roboto/OpenSans-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url("./fonts/Roboto/OpenSans-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+.font-roboto {
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+}
