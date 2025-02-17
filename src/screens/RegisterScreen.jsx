@@ -17,7 +17,9 @@ const RegisterScreen = () => {
     email: "",
     password: "",
     confirmPassword: "",
-    tempUsername: "",
+    tempName: "",
+    tempAddress: "",
+    tempMobileNumber: "09XX-XXXX-XXX",
   });
 
   const navigate = useNavigate();
@@ -67,14 +69,16 @@ const RegisterScreen = () => {
       );
       const user = userCredential.user;
 
-      const tempUsername = formData.email.includes("@")
+      const tempName = formData.email.includes("@")
         ? formData.email.split("@")[0]
         : "user";
 
       const userData = {
         uid: user.uid,
         email: formData.email,
-        tempUsername,
+        tempName,
+        tempAddress: formData.tempAddress,
+        tempMobileNumber: "09XX-XXXX-XXX",
       };
 
       const docRef = doc(db, "users", user.uid);
@@ -85,7 +89,9 @@ const RegisterScreen = () => {
         email: "",
         password: "",
         confirmPassword: "",
-        tempUsername: "",
+        tempName: "",
+        tempAddress: "",
+        tempMobileNumber: "09XX-XXXX-XXX",
       });
 
       navigate("/");
@@ -186,3 +192,5 @@ const RegisterScreen = () => {
 };
 
 export default RegisterScreen;
+
+//
