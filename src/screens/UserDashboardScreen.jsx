@@ -64,7 +64,7 @@ const UserDashboard = ({ getUser }) => {
   }
 
   return (
-    <div className="min-h-screen w-screen h-auto overflow-y-auto relative px-6 py-8">
+    <div className="min-h-screen bg-[#f8f4fc] w-screen h-auto overflow-y-auto relative px-6 py-8 flex flex-col gap-5">
       <Ribbon userData={userData} />
       <ChatComponent />
       <WeatherWidget />
