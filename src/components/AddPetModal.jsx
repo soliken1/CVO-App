@@ -92,7 +92,7 @@ const AddPetModal = ({ getUser }) => {
     <>
       <button
         onClick={() => setShowModal(true)}
-        className="fixed bottom-40 right-6 bg-[#050419] text-white p-4 rounded-full shadow-lg hover:bg-[#22224e]"
+        className="fixed z-10 bottom-40 right-6 bg-[#050419] text-white p-4 rounded-full shadow-lg hover:bg-[#22224e]"
       >
         ➕
       </button>
