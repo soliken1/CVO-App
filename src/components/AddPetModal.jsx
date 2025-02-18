@@ -3,7 +3,7 @@ import { collection, addDoc } from "firebase/firestore";
 import { db } from "../configs/firebaseConfigs";
 import fetchUser from "../hooks/fetchUser";
 import { Timestamp } from "firebase/firestore";
-
+import { MdOutlinePets } from "react-icons/md";
 
 const AddPetModal = ({ getUser }) => {
   const [userData, setUserData] = useState(null);
@@ -75,6 +75,7 @@ const AddPetModal = ({ getUser }) => {
       });
       setMessage("Pet added successfully!");
       setTimeout(() => setShowModal(false), 2000);
+      window.location.reload();
       setPetName("");
       setPetSpecies("");
       setPetBreed("");
@@ -89,40 +90,88 @@ const AddPetModal = ({ getUser }) => {
 
   return (
     <>
-      <button onClick={() => setShowModal(true)} className="fixed bottom-6 right-6 bg-[#050419] text-white p-4 rounded-full shadow-lg hover:bg-[#22224e]">
+      <button
+        onClick={() => setShowModal(true)}
+        className="fixed bottom-40 right-6 bg-[#050419] text-white p-4 rounded-full shadow-lg hover:bg-[#22224e]"
+      >
         ➕
       </button>
 
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-md shadow-lg w-96">
+          <div className="bg-white p-6 rounded-md flex flex-col shadow-lg w-96">
             <h2 className="text-lg font-bold mb-4">Add a New Pet</h2>
             <div className="w-full flex flex-col items-center">
-              <img src={imagePreview || "https://via.placeholder.com/150"} alt="Pet Preview" className="w-32 h-32 rounded-full object-cover mb-2" />
-              <input type="file" onChange={(e) => {
-                setPetImage(e.target.files[0]);
-                setImagePreview(URL.createObjectURL(e.target.files[0]));
-              }} className="border p-2 rounded-md w-full" />
+              {imagePreview ? (
+                <img
+                  src={imagePreview}
+                  alt="Pet Preview"
+                  className="w-32 h-32 shadow-md rounded-full object-cover mb-2"
+                />
+              ) : (
+                <MdOutlinePets className="w-32 h-32 shadow-md rounded-full border p-2 object-cover mb-2" />
+              )}
+              <input
+                type="file"
+                onChange={(e) => {
+                  setPetImage(e.target.files[0]);
+                  setImagePreview(URL.createObjectURL(e.target.files[0]));
+                }}
+                className="border p-2 rounded-md w-full"
+              />
             </div>
             <label className="font-bold mt-4">Pet Name</label>
-            <input type="text" value={petName} onChange={(e) => setPetName(e.target.value)} className="border p-2 rounded-md w-full" />
+            <input
+              type="text"
+              value={petName}
+              onChange={(e) => setPetName(e.target.value)}
+              className="border p-2 rounded-md w-full"
+            />
             <label className="font-bold mt-4">Species</label>
-            <input type="text" value={petSpecies} onChange={(e) => setPetSpecies(e.target.value)} className="border p-2 rounded-md w-full" />
+            <input
+              type="text"
+              value={petSpecies}
+              onChange={(e) => setPetSpecies(e.target.value)}
+              className="border p-2 rounded-md w-full"
+            />
             <label className="font-bold mt-4">Breed</label>
-            <input type="text" value={petBreed} onChange={(e) => setPetBreed(e.target.value)} className="border p-2 rounded-md w-full" />
+            <input
+              type="text"
+              value={petBreed}
+              onChange={(e) => setPetBreed(e.target.value)}
+              className="border p-2 rounded-md w-full"
+            />
             <label className="font-bold mt-4">Pet Birthday</label>
             <input
               type="date"
               value={petBday}
               onChange={(e) => setPetBday(e.target.value)}
-              className="border border-gray-300 p-2 rounded-md w-full"
+              className="border p-2 rounded-md w-full"
             />
             <label className="font-bold mt-4">Distinct Markings</label>
-            <input type="text" value={petMarkings} onChange={(e) => setPetMarkings(e.target.value)} className="border p-2 rounded-md w-full" />
-            {message && <p className="text-red-500 text-sm mt-2">{message}</p>}
+            <input
+              type="text"
+              value={petMarkings}
+              onChange={(e) => setPetMarkings(e.target.value)}
+              className="border p-2 rounded-md w-full"
+            />
+            {message && (
+              <p className="text-green-400 text-sm mt-2">{message}</p>
+            )}
             <div className="flex justify-between mt-4">
-              <button onClick={handleSavePet} className="bg-[#050419] text-white px-4 py-2 rounded-md font-bold" disabled={loading}>{loading ? "Saving..." : "Save Pet"}</button>
-              <button onClick={() => setShowModal(false)} className="bg-gray-400 px-4 py-2 rounded-md font-bold">Cancel</button>
+              <button
+                onClick={handleSavePet}
+                className="bg-[#050419] text-white px-4 py-2 rounded-md font-bold"
+                disabled={loading}
+              >
+                {loading ? "Saving..." : "Save Pet"}
+              </button>
+              <button
+                onClick={() => setShowModal(false)}
+                className="bg-gray-400 px-4 py-2 rounded-md font-bold"
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>

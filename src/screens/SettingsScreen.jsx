@@ -170,7 +170,7 @@ const SettingsScreen = ({ getUser }) => {
   return (
     <div className="h-screen w-screen flex flex-col items-center overflow-y-auto relative px-6 py-8">
       <Ribbon userData={userData} />
-      <div className="h-auto w-full flex flex-col gap-8">
+      <div className="h-auto w-full flex flex-col gap-8 pb-16">
         {/* Update Profile Image */}
         <div className="flex flex-col gap-4">
           <div className="w-full h-auto flex items-center justify-center">
@@ -219,8 +219,8 @@ const SettingsScreen = ({ getUser }) => {
           </div>
         </div>
 
-                {/* Update Address */}
-                <div className="flex flex-col gap-4">
+        {/* Update Address */}
+        <div className="flex flex-col gap-4">
           <label className="font-bold">Change Address</label>
           <div className="w-full h-auto flex flex-row gap-2">
             <input
@@ -239,8 +239,8 @@ const SettingsScreen = ({ getUser }) => {
           </div>
         </div>
 
-            {/* Update Mobile Number */}
-            <div className="flex flex-col gap-4">
+        {/* Update Mobile Number */}
+        <div className="flex flex-col gap-4">
           <label className="font-bold">Change Mobile Number</label>
           <div className="w-full h-auto flex flex-row gap-2">
             <input
@@ -258,7 +258,6 @@ const SettingsScreen = ({ getUser }) => {
             </button>
           </div>
         </div>
-
 
         {/* Update Password */}
         <div className="flex flex-col gap-4">
