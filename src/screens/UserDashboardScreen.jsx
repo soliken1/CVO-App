@@ -9,10 +9,14 @@ import ChatComponent from "../components/ChatComponent";
 import AddPetModal from "../components/AddPetModal";
 import { db } from "../configs/firebaseConfigs";
 import { collection, query, where, getDocs } from "firebase/firestore";
+import SplashScreen from "./SplashScreen";
+import { useNavigate } from "react-router-dom";
 
 const UserDashboard = ({ getUser }) => {
+  const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [weatherData, setWeatherData] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [pets, setPets] = useState([]);
 
   useEffect(() => {
@@ -21,6 +25,10 @@ const UserDashboard = ({ getUser }) => {
         const data = await fetchUser(getUser?.uid);
         if (data) {
           setUserData(data);
+          if (data.userRole === "Admin") {
+            navigate("/admindashboard");
+          }
+          setLoading(false);
         } else {
           console.error("Failed to fetch user data.");
         }
@@ -80,6 +88,10 @@ const UserDashboard = ({ getUser }) => {
     fetchUserPets();
     fetchWeather();
   }, [getUser?.uid]);
+
+  if (loading) {
+    return <SplashScreen />;
+  }
 
   return (
     <div className="min-h-screen w-screen h-auto overflow-y-auto relative px-6 py-8">
@@ -150,7 +162,7 @@ const UserDashboard = ({ getUser }) => {
       </div>
 
       {userData && <AddPetModal getUser={userData} />}
-      <Navbar />
+      <Navbar userData={userData} />
     </div>
   );
 };

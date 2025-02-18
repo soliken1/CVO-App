@@ -20,6 +20,7 @@ const RegisterScreen = () => {
     tempName: "",
     tempAddress: "",
     tempMobileNumber: "09XX-XXXX-XXX",
+    userRole: "User",
   });
 
   const navigate = useNavigate();
@@ -79,6 +80,7 @@ const RegisterScreen = () => {
         tempName,
         tempAddress: formData.tempAddress,
         tempMobileNumber: "09XX-XXXX-XXX",
+        userRole: "User",
       };
 
       const docRef = doc(db, "users", user.uid);
@@ -136,7 +138,9 @@ const RegisterScreen = () => {
             onChange={handleInputChange}
             value={formData.email}
           />
-          {errorMessage.email && <span className="text-xs text-red-400">{errorMessage.email}</span>}
+          {errorMessage.email && (
+            <span className="text-xs text-red-400">{errorMessage.email}</span>
+          )}
         </div>
 
         {/* Password Field */}
@@ -151,7 +155,11 @@ const RegisterScreen = () => {
             onChange={handleInputChange}
             value={formData.password}
           />
-          {errorMessage.password && <span className="text-xs text-red-400">{errorMessage.password}</span>}
+          {errorMessage.password && (
+            <span className="text-xs text-red-400">
+              {errorMessage.password}
+            </span>
+          )}
         </div>
 
         {/* Confirm Password Field */}
@@ -166,7 +174,11 @@ const RegisterScreen = () => {
             onChange={handleInputChange}
             value={formData.confirmPassword}
           />
-          {errorMessage.confirmPassword && <span className="text-xs text-red-400">{errorMessage.confirmPassword}</span>}
+          {errorMessage.confirmPassword && (
+            <span className="text-xs text-red-400">
+              {errorMessage.confirmPassword}
+            </span>
+          )}
         </div>
 
         {/* General Error Message */}
@@ -175,14 +187,18 @@ const RegisterScreen = () => {
         )}
 
         {/* Register Button */}
-        <button type="submit" className="bg-[#050419] py-2 rounded-lg text-white">
+        <button
+          type="submit"
+          className="bg-[#050419] py-2 rounded-lg text-white"
+        >
           Register
         </button>
 
         {/* Navigation Links */}
         <div className="flex flex-col items-center gap-3">
           <Link to="/" className="text-xs">
-            Already Have an Account? <label className="underline">Login Here</label>
+            Already Have an Account?{" "}
+            <label className="underline">Login Here</label>
           </Link>
           <label className="text-[#050419] text-xs mt-5">Login as Guest</label>
         </div>

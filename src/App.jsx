@@ -12,6 +12,7 @@ import Login from "./screens/LoginScreen.jsx";
 import UserDashboard from "./screens/UserDashboardScreen.jsx";
 import AdminDashboard from "./screens/AdminDashboardScreen.jsx";
 import SettingsScreen from "./screens/SettingsScreen.jsx";
+import DigitalPetbookScreen from "./screens/DigitalPetbookScreen.jsx";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -62,6 +63,16 @@ export default function App() {
               path="/dashboard"
               element={
                 <UserDashboard getUser={getUser} onLogout={handleLogout} />
+              }
+            />
+
+            <Route
+              path="/pets"
+              element={
+                <DigitalPetbookScreen
+                  getUser={getUser}
+                  onLogout={handleLogout}
+                />
               }
             />
 

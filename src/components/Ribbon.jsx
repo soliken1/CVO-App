@@ -3,7 +3,7 @@ import { FaUserCircle } from "react-icons/fa";
 
 const Ribbon = ({ userData }) => {
   const [name, setName] = useState("");
-  const [profile, setProfile] = useState("");
+  const [profile, setProfile] = useState(null);
   const [isLoading, setisLoading] = useState(true);
 
   useEffect(() => {
