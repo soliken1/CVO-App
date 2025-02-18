@@ -62,7 +62,9 @@ const ChatComponent = () => {
       {/* Floating Chat Icon */}
       <button
         onClick={handleChatOpen}
-        className=" bg-[#050419] text-white p-2 rounded-full shadow-lg"
+        className={`bg-[#050419] text-white p-2 rounded-full shadow-lg ${
+          isOpen ? "hidden" : "block"
+        }`}
       >
         <img
           src={Furbot_Logo}
@@ -73,7 +75,7 @@ const ChatComponent = () => {
 
       {/* Chat Box */}
       {isOpen && (
-        <div className="md:right-10 w-[90%] max-w-[320px] mt-2 bg-white shadow-lg rounded-lg flex flex-col overflow-hidden">
+        <div className="md:right-10 w-full max-w-[320px] mt-2 bg-white shadow-lg rounded-lg flex flex-col overflow-hidden">
           {/* Chat Header */}
           <div className="bg-[#050419] text-white p-3 flex justify-between items-center">
             {/* Bot Image */}

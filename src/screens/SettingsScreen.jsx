@@ -15,14 +15,16 @@ const SettingsScreen = ({ getUser }) => {
   const [newAddress, setNewAddress] = useState("");
   const [newMobileNumber, setNewMobileNumber] = useState("");
   const [newImage, setNewImage] = useState(null);
-  const [imagePreview, setImagePreview] = useState("");
+  const [imagePreview, setImagePreview] = useState(null);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchAndSetUserData = async () => {
       try {
         const data = await fetchUser(getUser.uid);
         setUserData(data);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -174,11 +176,15 @@ const SettingsScreen = ({ getUser }) => {
         {/* Update Profile Image */}
         <div className="flex flex-col gap-4">
           <div className="w-full h-auto flex items-center justify-center">
-            <img
-              src={imagePreview ? imagePreview : userData?.profileImage}
-              alt="Profile Preview"
-              className="w-32 h-32 rounded-full shadow-sm shadow-black object-cover"
-            />
+            {isLoading ? (
+              <div className="w-32 h-32 rounded-full shadow-sm bg-[#050419] shadow-black animate-pulse duration-1000 object-cover"></div>
+            ) : (
+              <img
+                src={imagePreview ? imagePreview : userData?.profileImage}
+                alt="Profile Preview"
+                className="w-32 h-32 rounded-full shadow-sm shadow-black object-cover"
+              />
+            )}
           </div>
           <label className="font-bold">Change Profile Image</label>
           <div className="w-full h-auto flex flex-row gap-2">
@@ -312,7 +318,7 @@ const SettingsScreen = ({ getUser }) => {
         </div>
       )}
 
-      <Navbar />
+      <Navbar userData={userData} />
     </div>
   );
 };

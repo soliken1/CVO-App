@@ -29,7 +29,11 @@ const LoginScreen = ({ onLogin }) => {
 
   const login = async () => {
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const user = userCredential.user;
 
       // Save activity in Firestore
@@ -43,7 +47,7 @@ const LoginScreen = ({ onLogin }) => {
       navigate("/dashboard");
     } catch (error) {
       setErrorMessage(null);
-  
+
       if (error.code === "auth/email-already-in-use") {
         setErrorMessage("Email already in use");
       } else if (error.code === "auth/missing-password") {
@@ -52,14 +56,14 @@ const LoginScreen = ({ onLogin }) => {
         setErrorMessage("Email is empty");
       } else if (error.code === "auth/invalid-credential") {
         setErrorMessage("Invalid Credentials, Please try again.");
-      } else{
+      } else {
         setErrorMessage("Cannot logged-in, Please try again.");
       }
-      
+
       console.log(error);
     }
   };
-  
+
   return (
     <div className="w-screen h-screen flex flex-col justify-center items-center gap-5 duration-300 relative">
       <ChatComponent />
