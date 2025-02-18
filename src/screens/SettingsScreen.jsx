@@ -172,7 +172,7 @@ const SettingsScreen = ({ getUser }) => {
   return (
     <div className="h-screen w-screen flex flex-col items-center overflow-y-auto relative px-6 py-8">
       <Ribbon userData={userData} />
-      <div className="h-auto w-full flex flex-col gap-8 pb-16">
+      <div className="h-auto w-full flex flex-col gap-8 pb-60">
         {/* Update Profile Image */}
         <div className="flex flex-col gap-4">
           <div className="w-full h-auto flex items-center justify-center">

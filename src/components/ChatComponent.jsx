@@ -58,7 +58,7 @@ const ChatComponent = () => {
   };
 
   return (
-    <div className="absolute bottom-20 right-5">
+    <div className="fixed bottom-20 right-5">
       {/* Floating Chat Icon */}
       <button
         onClick={handleChatOpen}
