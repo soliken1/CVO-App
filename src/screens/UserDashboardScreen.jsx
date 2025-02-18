@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Ribbon from "../components/Ribbon";
-import { MdOutlinePets } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";
 import fetchUser from "../hooks/fetchUser";
@@ -136,7 +135,9 @@ const UserDashboard = ({ getUser }) => {
                   />
                   <div className="flex flex-col w-9/12 pl-3">
                     <label className="text-sm font-bold">{pet.petName}</label>
-                    <label className="text-xs text-gray-400">{pet.petBreed}</label>
+                    <label className="text-xs text-gray-400">
+                      {pet.petBreed}
+                    </label>
                   </div>
                   <FaArrowRight />
                 </Link>

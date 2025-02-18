@@ -41,7 +41,7 @@ const ChatComponent = () => {
       setIsOpen(true);
 
       if (!greeted) {
-        setGreeted(true); // Prevent multiple greetings
+        setGreeted(true);
         setTimeout(() => {
           setMessages((prevMessages) => [
             ...prevMessages,
@@ -58,22 +58,22 @@ const ChatComponent = () => {
   };
 
   return (
-    <>
+    <div className="absolute bottom-20 right-5">
       {/* Floating Chat Icon */}
       <button
         onClick={handleChatOpen}
-        className="fixed bottom-24 right-6  duration-1000 animate-pulse bg-[#050419] text-white p-4 rounded-full shadow-lg hover:bg-[#050419] transition"
+        className=" bg-[#050419] text-white p-2 rounded-full shadow-lg"
       >
-       <img
-                src={Furbot_Logo}
-                alt="Furbot Logo"
-                className="w-12 h-12 rounded-full"
-              />
+        <img
+          src={Furbot_Logo}
+          alt="Furbot Logo"
+          className="w-12 h-12 rounded-full object-cover"
+        />
       </button>
 
       {/* Chat Box */}
       {isOpen && (
-        <div className="fixed bottom-20 right-5 md:right-10 w-[90%] max-w-[320px] bg-white shadow-lg rounded-lg flex flex-col overflow-hidden">
+        <div className="md:right-10 w-[90%] max-w-[320px] mt-2 bg-white shadow-lg rounded-lg flex flex-col overflow-hidden">
           {/* Chat Header */}
           <div className="bg-[#050419] text-white p-3 flex justify-between items-center">
             {/* Bot Image */}
@@ -127,7 +127,7 @@ const ChatComponent = () => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
