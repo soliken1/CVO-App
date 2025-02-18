@@ -4,6 +4,7 @@ import { db } from "../configs/firebaseConfigs";
 import fetchUser from "../hooks/fetchUser";
 import { Timestamp } from "firebase/firestore";
 import { MdOutlinePets } from "react-icons/md";
+import { FaPlus } from "react-icons/fa";
 
 const AddPetModal = ({ getUser }) => {
   const [userData, setUserData] = useState(null);
@@ -92,9 +93,9 @@ const AddPetModal = ({ getUser }) => {
     <>
       <button
         onClick={() => setShowModal(true)}
-        className="fixed z-10 bottom-40 right-6 bg-[#050419] text-white p-4 rounded-full shadow-lg hover:bg-[#22224e]"
+        className="fixed z-10 bottom-40 right-6 bg-[#050419] p-4 rounded-full shadow-lg hover:bg-[#22224e]"
       >
-        ➕
+        <FaPlus className="text-white " />
       </button>
 
       {showModal && (
