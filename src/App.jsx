@@ -34,6 +34,12 @@ export default function App() {
     return () => unsubscribe();
   }, []);
 
+  useEffect(() => {
+    if (isLoggedIn) {
+      window.history.replaceState(null, "", location.pathname);
+    }
+  }, [isLoggedIn, location]);
+
   const handleLogin = () => {
     setIsLoggedIn(true);
   };
