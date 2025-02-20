@@ -13,6 +13,8 @@ import UserDashboard from "./screens/UserDashboardScreen.jsx";
 import AdminDashboard from "./screens/AdminDashboardScreen.jsx";
 import SettingsScreen from "./screens/SettingsScreen.jsx";
 import DigitalPetbookScreen from "./screens/DigitalPetbookScreen.jsx";
+import ForgotPasswordScreen from "./screens/ForgotPasswordScreen.jsx";
+
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -43,6 +45,8 @@ export default function App() {
   return (
     <Router>
       <Routes>
+      <Route path="/forgotpassword" element={<ForgotPasswordScreen />} />
+
         <Route
           path="/register"
           element={isLoggedIn ? <Navigate to="/dashboard" /> : <Register />}
