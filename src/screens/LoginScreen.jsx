@@ -104,9 +104,7 @@ const LoginScreen = ({ onLogin }) => {
           Login
         </button>
         <div className="flex flex-col items-center gap-3">
-          <Link to="/forgotpassword" className="text-sm">
-            Forgot Password?
-          </Link>
+        <Link to="/forgotpassword" className="text-sm">Forgot Password?</Link>
           <Link to="/register" className="text-sm">
             Create an Account
           </Link>
@@ -118,5 +116,3 @@ const LoginScreen = ({ onLogin }) => {
 };
 
 export default LoginScreen;
-
-//
