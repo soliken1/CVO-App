@@ -6,11 +6,12 @@ const ChatComponent = () => {
   const [input, setInput] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [greeted, setGreeted] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, isTyping]);
 
   const sendMessage = async () => {
     if (input.trim() === "") return;
@@ -18,6 +19,9 @@ const ChatComponent = () => {
     const userMessage = { text: input, sender: "user" };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
+
+    // Show typing indicator
+    setIsTyping(true);
 
     try {
       const response = await fetch("https://cvo-furbot.vercel.app/chat", {
@@ -27,12 +31,18 @@ const ChatComponent = () => {
       });
 
       const data = await response.json();
-      if (data.response) {
-        const botMessage = { text: data.response, sender: "bot" };
-        setMessages((prev) => [...prev, botMessage]);
-      }
+
+      setTimeout(() => {
+        setIsTyping(false); // Hide typing indicator
+
+        if (data.response) {
+          const botMessage = { text: data.response, sender: "bot" };
+          setMessages((prev) => [...prev, botMessage]);
+        }
+      }, 1500); // Delay response for a more natural feel
     } catch (error) {
       console.error("Error fetching response:", error);
+      setIsTyping(false);
     }
   };
 
@@ -62,9 +72,7 @@ const ChatComponent = () => {
       {/* Floating Chat Icon */}
       <button
         onClick={handleChatOpen}
-        className={`bg-[#050419] text-white p-2 rounded-full shadow-lg ${
-          isOpen ? "hidden" : "block"
-        }`}
+        className={`bg-[#050419] text-white p-2 rounded-full shadow-lg ${isOpen ? "hidden" : "block"}`}
       >
         <img
           src={Furbot_Logo}
@@ -108,6 +116,15 @@ const ChatComponent = () => {
                 {msg.text}
               </div>
             ))}
+
+            {/* Typing Indicator */}
+            {isTyping && (
+              <div className="self-end bg-gray-300 text-black p-2 rounded-lg text-sm max-w-[80%]">
+                <span className="font-semibold">Furbot is thinking</span>
+                <span className="dots">...</span>
+              </div>
+            )}
+
             <div ref={messagesEndRef} />
           </div>
 
