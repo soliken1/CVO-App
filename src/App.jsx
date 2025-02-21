@@ -14,7 +14,9 @@ import AdminDashboard from "./screens/AdminDashboardScreen.jsx";
 import SettingsScreen from "./screens/SettingsScreen.jsx";
 import DigitalPetbookScreen from "./screens/DigitalPetbookScreen.jsx";
 import ForgotPasswordScreen from "./screens/ForgotPasswordScreen.jsx";
-
+import AdminPetScreen from "./screens/AdminPetScreen.jsx";
+import InfoScreen from "./screens/InfoScreen.jsx";
+import FeedbackScreen from "./screens/FeedbackScreen.jsx";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -51,7 +53,7 @@ export default function App() {
   return (
     <Router>
       <Routes>
-      <Route path="/forgotpassword" element={<ForgotPasswordScreen />} />
+        <Route path="/forgotpassword" element={<ForgotPasswordScreen />} />
 
         <Route
           path="/register"
@@ -79,10 +81,29 @@ export default function App() {
             <Route
               path="/pets"
               element={
+                <AdminPetScreen getUser={getUser} onLogout={handleLogout} />
+              }
+            />
+
+            <Route
+              path="/pet/:petId"
+              element={
                 <DigitalPetbookScreen
                   getUser={getUser}
                   onLogout={handleLogout}
                 />
+              }
+            />
+
+            <Route
+              path="/about"
+              element={<InfoScreen getUser={getUser} onLogout={handleLogout} />}
+            />
+
+            <Route
+              path="/feedbacks"
+              element={
+                <FeedbackScreen getUser={getUser} onLogout={handleLogout} />
               }
             />
 

@@ -104,11 +104,12 @@ const LoginScreen = ({ onLogin }) => {
           Login
         </button>
         <div className="flex flex-col items-center gap-3">
-        <Link to="/forgotpassword" className="text-sm">Forgot Password?</Link>
+          <Link to="/forgotpassword" className="text-sm">
+            Forgot Password?
+          </Link>
           <Link to="/register" className="text-sm">
             Create an Account
           </Link>
-          <label className="text-[#050419] text-xs mt-5">Login as Guest</label>
         </div>
       </div>
     </div>

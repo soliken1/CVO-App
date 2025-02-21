@@ -5,7 +5,8 @@ import fetchUser from "../hooks/fetchUser";
 import Ribbon from "../components/Ribbon";
 import ChatComponent from "../components/ChatComponent";
 import Navbar from "../components/Navbar";
-const DigitalPetbookScreen = ({ getUser }) => {
+
+const FeedbackScreen = ({ getUser }) => {
   const [userData, setUserData] = useState(null);
   useEffect(() => {
     const fetchAndSetUserData = async () => {
@@ -29,4 +30,4 @@ const DigitalPetbookScreen = ({ getUser }) => {
   );
 };
 
-export default DigitalPetbookScreen;
+export default FeedbackScreen;

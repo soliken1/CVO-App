@@ -1,5 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import Furbot_Logo from "../assets/Furbot_Logo.png";
+import { db } from "../configs/firebaseConfigs";
+import { Timestamp } from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
 
 const ChatComponent = () => {
   const [messages, setMessages] = useState([]);
@@ -39,7 +42,17 @@ const ChatComponent = () => {
           const botMessage = { text: data.response, sender: "bot" };
           setMessages((prev) => [...prev, botMessage]);
         }
-      }, 1500); // Delay response for a more natural feel
+      }, 1500);
+
+      if (data.response) {
+        const botMessage = { text: data.response, sender: "bot" };
+        setMessages((prev) => [...prev, botMessage]);
+      }
+
+      await addDoc(collection(db, "activity"), {
+        accessDate: Timestamp.now(),
+        action: "chatbot",
+      });
     } catch (error) {
       console.error("Error fetching response:", error);
       setIsTyping(false);

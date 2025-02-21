@@ -35,7 +35,7 @@ const Ribbon = ({ userData }) => {
             <label className="w-28 h-4 rounded-full animate-pulse duration-300 bg-[#050419]"></label>
             <img
               src={profile}
-              className="h-10 w-10 animate-pulse duration-300 bg-[#050419] rounded-full"
+              className="h-10 w-10 bg-[#050419] rounded-full"
             />
           </>
         ) : (

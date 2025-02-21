@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../configs/firebaseConfigs.js";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, addDoc, setDoc, Timestamp, collection } from "firebase/firestore";
 import Logo from "../assets/Logo.png";
 
 const RegisterScreen = () => {
@@ -80,11 +80,18 @@ const RegisterScreen = () => {
         tempName,
         tempAddress: formData.tempAddress,
         tempMobileNumber: "09XX-XXXX-XXX",
+        profileImage:
+          "https://res.cloudinary.com/dwnawhcfm/image/upload/v1740122614/xbi0ly1xbirlqhztpogg.png",
         userRole: "User",
       };
 
       const docRef = doc(db, "users", user.uid);
       await setDoc(docRef, userData);
+
+      await addDoc(collection(db, "activity"), {
+        accessDate: Timestamp.now(),
+        action: "register",
+      });
 
       // Reset form
       setFormData({
@@ -200,7 +207,6 @@ const RegisterScreen = () => {
             Already Have an Account?{" "}
             <label className="underline">Login Here</label>
           </Link>
-          <label className="text-[#050419] text-xs mt-5">Login as Guest</label>
         </div>
       </form>
     </div>

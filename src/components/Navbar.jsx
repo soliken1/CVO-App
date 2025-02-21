@@ -3,6 +3,8 @@ import { CgHomeAlt } from "react-icons/cg";
 import { MdOutlinePets } from "react-icons/md";
 import { IoSettingsSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import { MdOutlineInfo } from "react-icons/md";
+import { MdFeedback } from "react-icons/md";
 
 const Navbar = ({ userData }) => {
   const [isLoading, setLoading] = useState(true);
@@ -32,13 +34,29 @@ const Navbar = ({ userData }) => {
     <div className="fixed bottom-0 left-0 h-auto w-full">
       <div className="flex justify-evenly gap-1 items-center py-3 bg-[#050419] ">
         {userData?.userRole === "Admin" ? (
-          <Link
-            to="/admindashboard"
-            className="flex flex-col items-center gap-1 w-[74px]"
-          >
-            <CgHomeAlt className="h-6 w-6 text-white" />
-            <label className="text-sm text-white">Home</label>
-          </Link>
+          <>
+            <Link
+              to="/admindashboard"
+              className="flex flex-col items-center gap-1 w-[74px]"
+            >
+              <CgHomeAlt className="h-6 w-6 text-white" />
+              <label className="text-sm text-white">Home</label>
+            </Link>
+            <Link
+              to="/pets"
+              className="flex flex-col items-center gap-1 w-[74px]"
+            >
+              <MdOutlinePets className="h-6 w-6 text-white" />
+              <label className="text-sm text-white">Pets</label>
+            </Link>
+            <Link
+              to="/feedbacks"
+              className="flex flex-col items-center gap-1 w-[74px]"
+            >
+              <MdFeedback className="h-6 w-6 text-white" />
+              <label className="text-sm text-white">Feedbacks</label>
+            </Link>
+          </>
         ) : (
           <>
             <Link
@@ -48,13 +66,16 @@ const Navbar = ({ userData }) => {
               <CgHomeAlt className="h-6 w-6 text-white" />
               <label className="text-sm text-white">Home</label>
             </Link>
+
+            <Link
+              to="/about"
+              className="flex flex-col items-center gap-1 w-[74px]"
+            >
+              <MdOutlineInfo className="h-6 w-6 text-white" />
+              <label className="text-sm text-white">Info</label>
+            </Link>
           </>
         )}
-
-        <Link to="/pets" className="flex flex-col items-center gap-1 w-[74px]">
-          <MdOutlinePets className="h-6 w-6 text-white" />
-          <label className="text-sm text-white">Pets</label>
-        </Link>
 
         <Link
           to="/settings"
