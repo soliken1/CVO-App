@@ -18,46 +18,44 @@ const ChatComponent = () => {
 
   const sendMessage = async () => {
     if (input.trim() === "") return;
-
+  
     const userMessage = { text: input, sender: "user" };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
-
+  
     // Show typing indicator
     setIsTyping(true);
-
+  
     try {
       const response = await fetch("https://cvo-furbot.vercel.app/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: input }),
       });
-
+  
       const data = await response.json();
-
+  
+      // Simulate typing delay before bot responds
       setTimeout(() => {
         setIsTyping(false); // Hide typing indicator
-
+  
         if (data.response) {
           const botMessage = { text: data.response, sender: "bot" };
           setMessages((prev) => [...prev, botMessage]);
         }
-      }, 1500);
-
-      if (data.response) {
-        const botMessage = { text: data.response, sender: "bot" };
-        setMessages((prev) => [...prev, botMessage]);
-      }
-
+      }, 1500); // 1.5-second delay to show "Furbot is thinking..."
+  
+      // Log to Firestore
       await addDoc(collection(db, "activity"), {
         accessDate: Timestamp.now(),
         action: "chatbot",
       });
     } catch (error) {
       console.error("Error fetching response:", error);
-      setIsTyping(false);
+      setIsTyping(false); // Ensure typing indicator is removed on error
     }
   };
+  
 
   const handleChatOpen = () => {
     if (!isOpen) {
