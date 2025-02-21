@@ -103,7 +103,7 @@ const UserDashboard = ({ getUser }) => {
                   </Link>
                   <button
                     onClick={() => openModal(pet)}
-                    className="absolute top-1/2 right-4 transform -translate-y-1/2"
+                    className="absolute top-1/2 right-4 transform -translate-y-1/2 p-2"
                   >
                     <FaEllipsisV className="text-gray-500" />
                   </button>
