@@ -14,15 +14,13 @@ import { useNavigate } from "react-router-dom";
 import WeatherWidget from "../components/WeatherWidget";
 import EditDeletePetModal from "../components/EditDeletePetModal";
 
-
-
 const UserDashboard = ({ getUser }) => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [pets, setPets] = useState([]);
   const [selectedPet, setSelectedPet] = useState(null);
-const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const fetchAndSetUserData = async () => {
@@ -84,33 +82,43 @@ const [showModal, setShowModal] = useState(false);
         <div className="w-full h-auto flex flex-col gap-3">
           <label className="font-semibold text-xl">Your Pets</label>
           <div className="flex flex-col gap-2 h-auto w-full">
-          {pets.length > 0 ? (
-  pets.map((pet) => (
-    <div key={pet.id} className="relative w-full">
-      <Link to={`/pet/${pet.id}`} className="w-full h-20 flex items-center px-4 shadow-lg rounded-xl bg-white">
-        <img
-          src={pet.petImage}
-          alt={pet.petName}
-          className="h-16 w-16 rounded-full object-cover border border-gray-300"
-        />
-        <div className="flex flex-col w-9/12 pl-3">
-          <label className="text-sm font-bold">{pet.petName}</label>
-          <label className="text-xs text-gray-400">{pet.petBreed}</label>
-        </div>
-      </Link>
-      <button
-        onClick={() => openModal(pet)}
-        className="absolute top-1/2 right-4 transform -translate-y-1/2"
-      >
-        <FaEllipsisV className="text-gray-500" />
-      </button>
-    </div>
-  ))
-) : (
-  <p className="text-gray-500 text-sm">No pets found.</p>
-)}
+            {pets.length > 0 ? (
+              pets.map((pet) => (
+                <div key={pet.id} className="relative w-full">
+                  <Link
+                    to={`/pet/${pet.id}`}
+                    className="w-full h-20 flex items-center px-4 shadow-lg rounded-xl bg-white"
+                  >
+                    <img
+                      src={pet.petImage}
+                      alt={pet.petName}
+                      className="h-16 w-16 rounded-full object-cover border border-gray-300"
+                    />
+                    <div className="flex flex-col w-9/12 pl-3">
+                      <label className="text-sm font-bold">{pet.petName}</label>
+                      <label className="text-xs text-gray-400">
+                        {pet.petBreed}
+                      </label>
+                    </div>
+                  </Link>
+                  <button
+                    onClick={() => openModal(pet)}
+                    className="absolute top-1/2 right-4 transform -translate-y-1/2"
+                  >
+                    <FaEllipsisV className="text-gray-500" />
+                  </button>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-500 text-sm">No pets found.</p>
+            )}
 
-{showModal && <EditDeletePetModal pet={selectedPet} onClose={() => setShowModal(false)} />}
+            {showModal && (
+              <EditDeletePetModal
+                pet={selectedPet}
+                onClose={() => setShowModal(false)}
+              />
+            )}
           </div>
         </div>
       </div>

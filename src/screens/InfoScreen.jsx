@@ -5,7 +5,7 @@ import fetchUser from "../hooks/fetchUser";
 import Ribbon from "../components/Ribbon";
 import ChatComponent from "../components/ChatComponent";
 import Navbar from "../components/Navbar";
-const DigitalPetbookScreen = ({ getUser }) => {
+const InfoScreen = ({ getUser }) => {
   const [userData, setUserData] = useState(null);
   const [loading, setIsLoading] = useState(true);
   useEffect(() => {
@@ -34,4 +34,4 @@ const DigitalPetbookScreen = ({ getUser }) => {
   );
 };
 
-export default DigitalPetbookScreen;
+export default InfoScreen;
