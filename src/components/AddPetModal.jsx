@@ -74,6 +74,10 @@ const AddPetModal = ({ getUser }) => {
         petMarkings,
         petImage: imageUrl,
       });
+      await addDoc(collection(db, "activity"), {
+        accessDate: Timestamp.now(),
+        action: "addpet",
+      });
       setMessage("Pet added successfully!");
       setTimeout(() => setShowModal(false), 2000);
       window.location.reload();

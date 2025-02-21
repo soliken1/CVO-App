@@ -4,9 +4,16 @@ import { auth } from "../configs/firebaseConfigs";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import fetchUser from "../hooks/fetchUser";
-import { doc, updateDoc, deleteField } from "firebase/firestore";
-import { db } from "../configs/firebaseConfigs";
+import {
+  doc,
+  updateDoc,
+  deleteField,
+  collection,
+  addDoc,
+  Timestamp,
+} from "firebase/firestore";
 import Ribbon from "../components/Ribbon";
+import { db } from "../configs/firebaseConfigs";
 const SettingsScreen = ({ getUser }) => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
@@ -35,6 +42,10 @@ const SettingsScreen = ({ getUser }) => {
 
   const handleLogout = async () => {
     try {
+      await addDoc(collection(db, "activity"), {
+        accessDate: Timestamp.now(),
+        action: "logout",
+      });
       await signOut(auth);
       navigate("/");
     } catch (error) {

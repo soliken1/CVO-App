@@ -8,13 +8,11 @@ import Navbar from "../components/Navbar";
 
 const FeedbackScreen = ({ getUser }) => {
   const [userData, setUserData] = useState(null);
-  const [loading, setIsLoading] = useState(true);
   useEffect(() => {
     const fetchAndSetUserData = async () => {
       try {
         const data = await fetchUser(getUser.uid);
         setUserData(data);
-        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -23,9 +21,6 @@ const FeedbackScreen = ({ getUser }) => {
     fetchAndSetUserData();
   }, [getUser.uid]);
 
-  if (loading) {
-    return <SplashScreen />;
-  }
   return (
     <div className="min-h-screen bg-[#f8f4fc] w-screen h-auto overflow-y-auto relative px-6 py-8 flex flex-col gap-5">
       <Ribbon userData={userData} />
