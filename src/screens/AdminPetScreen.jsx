@@ -1,11 +1,11 @@
 import React from "react";
-import { useState, useEffect } from "react";
-import SplashScreen from "./SplashScreen";
-import fetchUser from "../hooks/fetchUser";
 import Ribbon from "../components/Ribbon";
 import ChatComponent from "../components/ChatComponent";
 import Navbar from "../components/Navbar";
-const DigitalPetbookScreen = ({ getUser }) => {
+import { useState, useEffect } from "react";
+import SplashScreen from "./SplashScreen";
+import fetchUser from "../hooks/fetchUser";
+const AdminPetScreen = ({ getUser }) => {
   const [userData, setUserData] = useState(null);
   const [loading, setIsLoading] = useState(true);
   useEffect(() => {
@@ -25,6 +25,7 @@ const DigitalPetbookScreen = ({ getUser }) => {
   if (loading) {
     return <SplashScreen />;
   }
+
   return (
     <div className="min-h-screen bg-[#f8f4fc] w-screen h-auto overflow-y-auto relative px-6 py-8 flex flex-col gap-5">
       <Ribbon userData={userData} />
@@ -34,4 +35,4 @@ const DigitalPetbookScreen = ({ getUser }) => {
   );
 };
 
-export default DigitalPetbookScreen;
+export default AdminPetScreen;
