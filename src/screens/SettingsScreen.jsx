@@ -195,10 +195,10 @@ const SettingsScreen = ({ getUser }) => {
   
     try {
       const response = await emailjs.send(
-        "service_wmbofyj", // Replace with your EmailJS Service ID
-        "template_i1hctq8", // Replace with your EmailJS Template ID
+        "service_wmbofyj",
+        "template_i1hctq8",
         templateParams,
-        "OTKcxW7tWUSp9gqQH" // Replace with your EmailJS User ID
+        "OTKcxW7tWUSp9gqQH"
       );
   
       console.log("Email sent:", response);
