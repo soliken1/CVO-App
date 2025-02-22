@@ -5,10 +5,9 @@ const SplashScreen = ({ onComplete }) => {
   const [fadeOut, setFadeOut] = useState(false);
 
   useEffect(() => {
-    // After 2.5s, start fade out
+    
     const timeout = setTimeout(() => setFadeOut(true), 2500);
     
-    // After 3s, call onComplete to remove splash screen
     const removeTimeout = setTimeout(() => onComplete(), 3000);
 
     return () => {
