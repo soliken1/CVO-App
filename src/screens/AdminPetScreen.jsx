@@ -87,12 +87,12 @@ const AdminPetScreen = ({ getUser }) => {
       <Ribbon userData={userData} />
       <div className="w-full flex flex-col items-end h-auto mt-5 gap-5">
         <div className="flex flex-row gap-2">
-          <button
+          {/* <button
             onClick={handleFilterCycle}
             className="px-2 min-w-16 h-8 cursor-pointer text-white rounded-lg text-xs bg-[#050419]"
           >
             {filter}
-          </button>
+          </button> */}
           <input
             placeholder="Search Pets..."
             className="w-40 h-8 rounded-lg border-gray-400 border px-2 text-xs bg-white"

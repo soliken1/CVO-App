@@ -12,6 +12,7 @@ import { BsActivity } from "react-icons/bs";
 import fetchPetCount from "../hooks/fetchPets";
 import { MdOutlinePets } from "react-icons/md";
 import { FaSyringe } from "react-icons/fa";
+import getUniqueVaccinatedPetCount from "../hooks/fetchPetVaccinated";
 
 const AdminDashboard = ({ getUser }) => {
   const [userData, setUserData] = useState(null);
@@ -52,8 +53,8 @@ const AdminDashboard = ({ getUser }) => {
     };
 
     const getVaccinated = async () => {
-      // Logic to fetch pet vaccinated count
-      setPetVaccinated(0);
+      const totalVaccinations = await getUniqueVaccinatedPetCount();
+      setPetVaccinated(totalVaccinations);
     };
 
     getVaccinated();
