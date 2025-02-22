@@ -26,33 +26,46 @@ const ChatComponent = () => {
     // Show typing indicator
     setIsTyping(true);
   
+    // Create an AbortController to handle timeouts
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 seconds timeout
+  
     try {
       const response = await fetch("https://cvo-furbot.vercel.app/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: input }),
+        signal: controller.signal, // Attach the abort signal
       });
+  
+      clearTimeout(timeoutId); // Clear timeout if request succeeds
+  
+      if (!response.ok) {
+        throw new Error(`Server responded with ${response.status}`);
+      }
   
       const data = await response.json();
   
-      // Simulate typing delay before bot responds
       setTimeout(() => {
         setIsTyping(false); // Hide typing indicator
-  
         if (data.response) {
           const botMessage = { text: data.response, sender: "bot" };
           setMessages((prev) => [...prev, botMessage]);
         }
-      }, 1500); // 1.5-second delay to show "Furbot is thinking..."
-  
-      // Log to Firestore
+      }, 1500);
+      
+      // Log activity to Firestore
       await addDoc(collection(db, "activity"), {
         accessDate: Timestamp.now(),
         action: "chatbot",
       });
+  
     } catch (error) {
       console.error("Error fetching response:", error);
-      setIsTyping(false); // Ensure typing indicator is removed on error
+      setIsTyping(false);
+  
+      // Show a friendly error message to the user
+      setMessages((prev) => [...prev, { text: "Oops! The chatbot is not responding. Try again later.", sender: "bot" }]);
     }
   };
   
