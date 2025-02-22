@@ -1,4 +1,4 @@
-# CVO: A web and mobile application built with React.js + Vite for the web, integrated with Android Studio WebView for streamline veterinary services and enhance accessibility.
+# CVO: A web and mobile application built with React.js + Vite, integrated with Android Studio WebView for streamline veterinary services and enhance accessibility.
 
 ## Techstack:
 
