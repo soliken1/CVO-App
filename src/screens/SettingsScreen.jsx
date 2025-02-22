@@ -332,7 +332,7 @@ const SettingsScreen = ({ getUser }) => {
   <button
     onClick={sendEmail}
     className="bg-[#050419] text-white font-bold px-4 py-2 rounded-md"
-  >
+  disabled>
     Send Email
   </button>
 </div>
