@@ -195,10 +195,10 @@ const SettingsScreen = ({ getUser }) => {
   
     try {
       const response = await emailjs.send(
-        "service_wmbofyj", // Replace with your EmailJS Service ID
-        "template_i1hctq8", // Replace with your EmailJS Template ID
+        "service_wmbofyj",
+        "template_i1hctq8",
         templateParams,
-        "OTKcxW7tWUSp9gqQH" // Replace with your EmailJS User ID
+        "OTKcxW7tWUSp9gqQH"
       );
   
       console.log("Email sent:", response);
@@ -332,7 +332,7 @@ const SettingsScreen = ({ getUser }) => {
   <button
     onClick={sendEmail}
     className="bg-[#050419] text-white font-bold px-4 py-2 rounded-md"
-  >
+  disabled>
     Send Email
   </button>
 </div>
