@@ -5,7 +5,7 @@ import Navbar from "../components/Navbar";
 import { useState, useEffect } from "react";
 import fetchUser from "../hooks/fetchUser";
 import { db } from "../configs/firebaseConfigs";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 import { Link } from "react-router-dom";
 
 const AdminPetScreen = ({ getUser }) => {
@@ -31,19 +31,35 @@ const AdminPetScreen = ({ getUser }) => {
   useEffect(() => {
     const fetchPets = async () => {
       try {
+        // Fetch all users first and store their names in a dictionary
+        const usersCollection = collection(db, "users");
+        const usersSnapshot = await getDocs(usersCollection);
+        
+        const usersMap = {};
+        usersSnapshot.forEach((doc) => {
+          const userData = doc.data();
+          usersMap[doc.id] = userData.name || "Unknown"; // Store UID as key and name as value
+        });
+    
+        // Fetch all pets
         const petsCollection = collection(db, "pets");
         const petsSnapshot = await getDocs(petsCollection);
-        const petsList = petsSnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
+    
+        const petsList = petsSnapshot.docs.map((petDoc) => {
+          const petData = petDoc.data();
+          return {
+            id: petDoc.id,
+            ...petData,
+            ownerName: usersMap[petData.ownerId] || "Unknown", // Match UID to Name
+          };
+        });
+    
         setPets(petsList);
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching pets:", error);
       }
     };
-
     fetchPets();
   }, []);
 
@@ -68,11 +84,13 @@ const AdminPetScreen = ({ getUser }) => {
 
   const filterBySearch = (petList) => {
     if (!searchTerm) return petList;
+  
     return petList.filter((pet) =>
-      pet.petName.toLowerCase().includes(searchTerm.toLowerCase())
+      pet.petName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      pet.ownerName.toLowerCase().includes(searchTerm.toLowerCase())
     );
   };
-
+  
   const displayedPets = () => {
     let filteredList = [...pets];
     filteredList = filterByVaccination(filteredList);
@@ -94,7 +112,7 @@ const AdminPetScreen = ({ getUser }) => {
             {filter}
           </button> */}
           <input
-            placeholder="Search Pets..."
+            placeholder="Search Pets or Owner..."
             className="w-40 h-8 rounded-lg border-gray-400 border px-2 text-xs bg-white"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
