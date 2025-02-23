@@ -145,7 +145,6 @@ const AdminDashboard = ({ getUser }) => {
           </div>
         </div>
       </div>
-      <ChatComponent />
       <Navbar userData={userData} />
     </div>
   );

@@ -126,7 +126,6 @@ const AdminPetScreen = ({ getUser }) => {
           <label>No pets found matching your criteria</label>
         )}
       </div>
-      <ChatComponent />
       <Navbar userData={userData} />
     </div>
   );
