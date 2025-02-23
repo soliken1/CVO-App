@@ -74,7 +74,7 @@ const DigitalPetbookScreen = ({ getUser }) => {
           
     await addDoc(collection(db, "scheduledEmails"), {
       email: ownerData.email,
-      name: ownerData.name,
+      name: ownerData.name || "User",
       petName: petData.petName,
       vaccineType: data.vaccineType,
       expiryDate: expiryTimestamp,
