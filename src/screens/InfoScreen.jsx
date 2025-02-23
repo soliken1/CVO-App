@@ -18,7 +18,7 @@ const InfoScreen = ({ getUser }) => {
     try {
       await addDoc(collection(db, "feedbacks"), {
         uid: getUser.uid,
-        name: getUser.displayName || "Anonymous",
+        name: getUser.name || "User",
         message: feedback,
         createdAt: new Date(),
       });
