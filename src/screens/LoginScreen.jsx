@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { auth, db } from "../configs/firebaseConfigs"; // Import db from firebaseConfigs
+import { auth, db } from "../configs/firebaseConfigs";
 import { Link } from "react-router-dom";
 import SplashScreen from "./SplashScreen";
 import Logo from "../assets/Logo.png";
-import { useCookies } from "react-cookie";
-import { doc, setDoc } from "firebase/firestore"; // Import setDoc from firebase/firestore
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import ChatComponent from "../components/ChatComponent";
+import sendExpiryNotifications from "../utils/sendExpiryNotifications";
 
 const LoginScreen = ({ onLogin }) => {
   const navigate = useNavigate();
@@ -21,7 +21,34 @@ const LoginScreen = ({ onLogin }) => {
       setShowSplash(false);
     }, 3000);
     return () => clearTimeout(timer);
-  });
+  }, []);
+
+  useEffect(() => {
+    const checkLoggedInUser = async () => {
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          // Check user role in Firestore
+          const userRef = doc(db, "users", user.uid);
+          const userDoc = await getDoc(userRef);
+
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            console.log("User Role:", userData.userRole);
+
+            if (userData.userRole === "Admin") {
+              console.log("Admin already logged in. Redirecting...");
+              sendExpiryNotifications(); // Run expiry notifications
+              navigate("/dashboard");
+            } else {
+              navigate("/dashboard");
+            }
+          }
+        }
+      });
+    };
+
+    checkLoggedInUser();
+  }, [navigate]);
 
   if (showSplash) {
     return <SplashScreen />;
@@ -43,6 +70,20 @@ const LoginScreen = ({ onLogin }) => {
         action: "login",
       });
 
+      const userRef = doc(db, "users", user.uid);
+      const userDoc = await getDoc(userRef);
+
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        console.log("User Role:", userData.userRole);
+
+        // If the logged-in user is an Admin, run sendExpiryNotifications
+        if (userData.userRole === "Admin") {
+          console.log("Admin logged in. Running expiry notifications...");
+          sendExpiryNotifications();
+        }
+      }
+
       onLogin();
       navigate("/dashboard");
     } catch (error) {
@@ -57,7 +98,7 @@ const LoginScreen = ({ onLogin }) => {
       } else if (error.code === "auth/invalid-credential") {
         setErrorMessage("Invalid Credentials, Please try again.");
       } else {
-        setErrorMessage("Cannot logged-in, Please try again.");
+        setErrorMessage("Cannot log in, Please try again.");
       }
 
       console.log(error);

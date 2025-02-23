@@ -14,7 +14,7 @@ import {
 } from "firebase/firestore";
 import Ribbon from "../components/Ribbon";
 import { db } from "../configs/firebaseConfigs";
-import emailjs from "emailjs-com"; 
+
 const SettingsScreen = ({ getUser }) => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
@@ -181,35 +181,6 @@ const SettingsScreen = ({ getUser }) => {
     }
   };
 
-  const sendEmail = async () => {
-    if (!userData?.email) {
-      alert("User email is not available.");
-      return;
-    }
-  
-    const templateParams = {
-      to_email: userData.email,
-      to_name: userData.name || "User",
-      message: "Hello! This is a test email from the CVO Info App.",
-    };
-  
-    try {
-      const response = await emailjs.send(
-        "service_wmbofyj",
-        "template_i1hctq8",
-        templateParams,
-        "OTKcxW7tWUSp9gqQH"
-      );
-  
-      console.log("Email sent:", response);
-      alert("Email sent successfully!");
-    } catch (error) {
-      console.error("Error sending email:", error);
-      alert("Failed to send email. Please try again.");
-    }
-  };
-  
-
   return (
     <div className="h-screen w-screen flex flex-col items-center overflow-y-auto relative px-6 py-8">
       <Ribbon userData={userData} />
@@ -325,19 +296,7 @@ const SettingsScreen = ({ getUser }) => {
             </button>
           </div>
         </div>
-
-        {/* Send Email Button */}
-<div className="flex flex-col gap-4">
-  <label className="font-bold">Send Email</label>
-  <button
-    onClick={sendEmail}
-    className="bg-[#050419] text-white font-bold px-4 py-2 rounded-md"
-  disabled>
-    Send Email
-  </button>
-</div>
-
-
+        
         {/* Logout Button */}
         <button
           onClick={() => setShowLogoutConfirm(true)}

@@ -50,6 +50,8 @@ const DigitalPetbookScreen = ({ getUser }) => {
   }, [petId]);
 
   const handleAddVaccine = async (data) => {
+    const vaxTimestamp = Timestamp.fromDate(new Date(data.vaccineDate));
+    const expiryTimestamp = Timestamp.fromDate(new Date(data.expiryDate));
     if (!petId) {
       console.error("No pet ID found.");
       return;
@@ -58,8 +60,8 @@ const DigitalPetbookScreen = ({ getUser }) => {
     try {
       await addDoc(collection(db, "vaccinated"), {
         petId,
-        vaccineDate: data.vaccineDate,
-        expiryDate: data.expiryDate,
+        vaccineDate: vaxTimestamp,
+        expiryDate: expiryTimestamp,
         vaccineType: data.vaccineType,
         createdAt: new Date(),
       });
@@ -68,6 +70,17 @@ const DigitalPetbookScreen = ({ getUser }) => {
         accessDate: Timestamp.now(),
         action: "addvaccination",
       });
+
+          
+    await addDoc(collection(db, "scheduledEmails"), {
+      email: ownerData.email,
+      name: ownerData.name,
+      petName: petData.petName,
+      vaccineType: data.vaccineType,
+      expiryDate: expiryTimestamp,
+      status: "pending",
+    });
+      
 
       window.location.reload();
       setIsModalOpen(false);
@@ -220,10 +233,14 @@ const DigitalPetbookScreen = ({ getUser }) => {
                         className="flex justify-between border-b pb-2"
                       >
                         <span className="w-1/3 text-sm font-medium text-gray-700">
-                          {vax.vaccineDate}
+                        {vax.vaccineDate instanceof Timestamp 
+                        ? vax.vaccineDate.toDate().toLocaleDateString() 
+                        : new Date(vax.vaccineDate).toLocaleDateString()}
                         </span>
                         <span className="w-1/3 text-sm font-medium text-gray-700">
-                          {vax.expiryDate}
+                        {vax.expiryDate instanceof Timestamp 
+                         ? vax.expiryDate.toDate().toLocaleDateString() 
+                        : new Date(vax.expiryDate).toLocaleDateString()}
                         </span>
                         <span className="w-1/3 text-sm font-semibold text-green-700">
                           {vax.vaccineType}
@@ -251,7 +268,6 @@ const DigitalPetbookScreen = ({ getUser }) => {
         /*The Petbook Loader Div*/
         <div className="h-48 mt-5 rounded-lg bg-gradient-to-br shadow-md shadow-black from-[#141065] to-[#050419] animate-pulse duration-1000"></div>
       )}
-      <ChatComponent />
       <Navbar userData={userData} />
 
       {/* Modal */}
