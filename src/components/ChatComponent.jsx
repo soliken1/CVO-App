@@ -159,7 +159,7 @@ const ChatComponent = () => {
           </div>
 
           {/* Input Field */}
-          <div className="flex py-2 px-1 w-full justify-evenly border-t bg-white">
+          <div className="flex py-2 px-1 w-full gap-2 justify-evenly border-t bg-white">
             <input
               type="text"
               value={input}
