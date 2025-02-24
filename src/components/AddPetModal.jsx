@@ -103,8 +103,8 @@ const AddPetModal = ({ getUser }) => {
       </button>
 
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-md flex flex-col shadow-lg w-96">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center py-10 items-center z-50">
+          <div className="bg-white p-6 rounded-md flex flex-col shadow-lg w-96 overflow-y-auto h-full pb-60">
             <h2 className="text-lg font-bold mb-4">Add a New Pet</h2>
             <div className="w-full flex flex-col items-center">
               {imagePreview ? (
