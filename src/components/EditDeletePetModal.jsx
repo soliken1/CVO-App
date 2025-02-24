@@ -115,24 +115,24 @@ const EditDeletePetModal = ({ pet, onClose }) => {
 
           {message && <p className="text-green-400 text-sm mt-2">{message}</p>}
 
-          <div className="flex justify-between mt-4">
+          <div className="flex justify-between mt-4 gap-5">
             <button
               onClick={handleUpdatePet}
-              className="bg-blue-500 text-white px-4 py-2 rounded-md font-bold"
+              className="bg-blue-500 w-[120px] text-xs text-nowrap text-white px-4 py-2 rounded-md font-bold"
               disabled={loading}
             >
               {loading ? "Updating..." : "Save Changes"}
             </button>
             <button
               onClick={() => setShowDeleteModal(true)}
-              className="bg-red-500 text-white px-4 py-2 rounded-md font-bold"
+              className="bg-red-500 w-[120px] text-xs text-nowrap text-white px-4 py-2 rounded-md font-bold"
               disabled={loading}
             >
               {loading ? "Deleting..." : "Delete Pet"}
             </button>
             <button
               onClick={onClose}
-              className="bg-gray-400 px-4 py-2 rounded-md font-bold"
+              className="bg-gray-400 px-4 w-[120px] text-nowrap text-xs py-2 rounded-md font-bold"
             >
               Cancel
             </button>
