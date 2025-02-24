@@ -31,7 +31,7 @@ const ChatComponent = () => {
     const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 seconds timeout
 
     try {
-      const response = await fetch("https://cvo-furbot.vercel.app/chat", {
+      const response = await fetch("https://cvo-chatbot.vercel.app/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: input }),
