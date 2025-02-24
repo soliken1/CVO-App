@@ -33,7 +33,6 @@ const LoginScreen = ({ onLogin }) => {
 
           if (userDoc.exists()) {
             const userData = userDoc.data();
-            console.log("User Role:", userData.userRole);
 
             if (userData.userRole === "Admin") {
               console.log("Admin already logged in. Redirecting...");
