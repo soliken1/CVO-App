@@ -35,16 +35,12 @@ const FeedbackScreen = ({ getUser }) => {
     fetchFeedbacks();
   }, [getUser.uid]);
 
-  if (loading) {
-    return <SplashScreen />;
-  }
-
   return (
     <div className="min-h-screen bg-[#f8f4fc] w-screen h-auto overflow-y-auto relative px-6 pt-8 pb-60 flex flex-col">
       <Ribbon userData={userData} />
 
       <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-5 min-h-screen overflow-y-auto">
-        {feedbacks.length > 0 ? (
+        {feedbacks.length > 0 && !loading ? (
           feedbacks.map((feedback) => (
             <div
               key={feedback.id}
@@ -72,9 +68,7 @@ const FeedbackScreen = ({ getUser }) => {
             </div>
           ))
         ) : (
-          <p className="text-gray-500 text-center w-full col-span-full">
-            No feedback available.
-          </p>
+          <div className="w-full h-32 rounded-lg bg-[#050419] animate-pulse duration-1000"></div>
         )}
       </div>
 
