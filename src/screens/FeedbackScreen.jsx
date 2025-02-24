@@ -38,7 +38,7 @@ const FeedbackScreen = ({ getUser }) => {
   return (
     <div className="min-h-screen bg-[#f8f4fc] w-screen h-auto overflow-y-auto relative px-6 pt-8 pb-60 flex flex-col">
       <Ribbon userData={userData} />
-
+      <label className="text-xl font-semibold font-roboto">User Feedback</label>
       <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-5 min-h-screen overflow-y-auto">
         {feedbacks.length > 0 && !loading ? (
           feedbacks.map((feedback) => (
