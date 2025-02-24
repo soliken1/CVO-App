@@ -104,7 +104,7 @@ const AddPetModal = ({ getUser }) => {
 
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center py-10 items-center z-50">
-          <div className="bg-white p-6 rounded-md flex flex-col shadow-lg w-96 overflow-y-auto h-full pb-60">
+          <div className="bg-white p-6 rounded-md flex flex-col shadow-lg w-96 overflow-y-auto h-full pt-20 pb-60">
             <h2 className="text-lg font-bold mb-4">Add a New Pet</h2>
             <div className="w-full flex flex-col items-center">
               {imagePreview ? (
@@ -122,7 +122,7 @@ const AddPetModal = ({ getUser }) => {
                   setPetImage(e.target.files[0]);
                   setImagePreview(URL.createObjectURL(e.target.files[0]));
                 }}
-                className="border p-2 rounded-md w-full"
+                className="border p-2 rounded-md w-full h-10"
               />
             </div>
             <label className="font-bold mt-4">Pet Name</label>
@@ -130,35 +130,35 @@ const AddPetModal = ({ getUser }) => {
               type="text"
               value={petName}
               onChange={(e) => setPetName(e.target.value)}
-              className="border p-2 rounded-md w-full"
+              className="border p-2 rounded-md w-full h-10"
             />
             <label className="font-bold mt-4">Species</label>
             <input
               type="text"
               value={petSpecies}
               onChange={(e) => setPetSpecies(e.target.value)}
-              className="border p-2 rounded-md w-full"
+              className="border p-2 rounded-md w-full h-10"
             />
             <label className="font-bold mt-4">Breed</label>
             <input
               type="text"
               value={petBreed}
               onChange={(e) => setPetBreed(e.target.value)}
-              className="border p-2 rounded-md w-full"
+              className="border p-2 rounded-md w-full h-10"
             />
-            <label className="font-bold mt-4">Pet Birthday</label>
+            <label className="font-bold mt-4 ">Pet Birthday</label>
             <input
               type="date"
               value={petBday}
               onChange={(e) => setPetBday(e.target.value)}
-              className="border p-2 rounded-md w-full"
+              className="border p-2 rounded-md w-full h-10"
             />
             <label className="font-bold mt-4">Distinct Markings</label>
             <input
               type="text"
               value={petMarkings}
               onChange={(e) => setPetMarkings(e.target.value)}
-              className="border p-2 rounded-md w-full"
+              className="border p-2 rounded-md w-full h-10"
             />
             {message && (
               <p className="text-green-400 text-sm mt-2">{message}</p>
