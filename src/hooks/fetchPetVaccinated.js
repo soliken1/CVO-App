@@ -7,13 +7,17 @@ const getUniqueVaccinatedPetCount = async () => {
     const vaxSnapshot = await getDocs(vaxCollection);
 
     const uniquePets = new Set();
-    const today = new Date().toISOString().split("T")[0];
+    const today = new Date();
 
     vaxSnapshot.forEach((doc) => {
       const data = doc.data();
 
-      if (data.expiryDate && data.expiryDate >= today) {
-        uniquePets.add(data.petId);
+      if (data.expiryDate && data.expiryDate.seconds) {
+        const expiryDate = new Date(data.expiryDate.seconds * 1000);
+
+        if (expiryDate >= today) {
+          uniquePets.add(data.petId);
+        }
       }
     });
 

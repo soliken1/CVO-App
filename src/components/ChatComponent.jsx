@@ -18,18 +18,18 @@ const ChatComponent = () => {
 
   const sendMessage = async () => {
     if (input.trim() === "") return;
-  
+
     const userMessage = { text: input, sender: "user" };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
-  
+
     // Show typing indicator
     setIsTyping(true);
-  
+
     // Create an AbortController to handle timeouts
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 seconds timeout
-  
+
     try {
       const response = await fetch("https://cvo-furbot.vercel.app/chat", {
         method: "POST",
@@ -37,15 +37,15 @@ const ChatComponent = () => {
         body: JSON.stringify({ message: input }),
         signal: controller.signal, // Attach the abort signal
       });
-  
+
       clearTimeout(timeoutId); // Clear timeout if request succeeds
-  
+
       if (!response.ok) {
         throw new Error(`Server responded with ${response.status}`);
       }
-  
+
       const data = await response.json();
-  
+
       setTimeout(() => {
         setIsTyping(false); // Hide typing indicator
         if (data.response) {
@@ -53,22 +53,26 @@ const ChatComponent = () => {
           setMessages((prev) => [...prev, botMessage]);
         }
       }, 1500);
-      
+
       // Log activity to Firestore
       await addDoc(collection(db, "activity"), {
         accessDate: Timestamp.now(),
         action: "chatbot",
       });
-  
     } catch (error) {
       console.error("Error fetching response:", error);
       setIsTyping(false);
-  
+
       // Show a friendly error message to the user
-      setMessages((prev) => [...prev, { text: "Oops! The chatbot is not responding. Try again later.", sender: "bot" }]);
+      setMessages((prev) => [
+        ...prev,
+        {
+          text: "Oops! The chatbot is not responding. Try again later.",
+          sender: "bot",
+        },
+      ]);
     }
   };
-  
 
   const handleChatOpen = () => {
     if (!isOpen) {
@@ -96,7 +100,9 @@ const ChatComponent = () => {
       {/* Floating Chat Icon */}
       <button
         onClick={handleChatOpen}
-        className={`bg-[#050419] text-white p-2 rounded-full shadow-lg ${isOpen ? "hidden" : "block"}`}
+        className={`bg-[#050419] text-white p-2 rounded-full shadow-lg ${
+          isOpen ? "hidden" : "block"
+        }`}
       >
         <img
           src={Furbot_Logo}
@@ -153,7 +159,7 @@ const ChatComponent = () => {
           </div>
 
           {/* Input Field */}
-          <div className="p-3 flex gap-2 border-t bg-white">
+          <div className="flex py-2 px-1 gap-2 border-t bg-white">
             <input
               type="text"
               value={input}
