@@ -113,7 +113,7 @@ const ChatComponent = () => {
 
       {/* Chat Box */}
       {isOpen && (
-        <div className="md:right-10 w-full max-w-[300px] mt-2 bg-white shadow-lg rounded-lg flex flex-col overflow-hidden">
+        <div className="md:right-10 w-full max-w-[325px] mt-2 bg-white shadow-lg rounded-lg flex flex-col overflow-hidden">
           {/* Chat Header */}
           <div className="bg-[#050419] text-white p-3 flex justify-between items-center">
             {/* Bot Image */}
@@ -159,13 +159,13 @@ const ChatComponent = () => {
           </div>
 
           {/* Input Field */}
-          <div className="flex py-2 px-1 gap-2 border-t bg-white">
+          <div className="flex py-2 px-1 w-full justify-evenly border-t bg-white">
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Type a message..."
-              className="flex-1 p-2 border rounded-md outline-none"
+              className="p-2 border rounded-md outline-none"
             />
             <button
               onClick={sendMessage}

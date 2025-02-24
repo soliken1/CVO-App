@@ -49,7 +49,10 @@ const ActionAnalytics = () => {
     };
   }, []);
   return (
-    <div className="w-full h-60">
+    <div className="w-full h-60 mt-4 flex flex-col gap-4">
+      <label className="text-lg font-semibold font-roboto">
+        Specific User Activities
+      </label>
       {chartData ? (
         <Line
           ref={chartRef} // Attach the reference
@@ -69,7 +72,7 @@ const ActionAnalytics = () => {
           }}
         />
       ) : (
-        <p>Loading chart...</p>
+        <div className="w-full h-8 animate-pulse bg-[#050419] rounded-full duration-1000 mt-5"></div>
       )}
     </div>
   );
