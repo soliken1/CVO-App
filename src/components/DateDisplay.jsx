@@ -21,7 +21,7 @@ const DateDisplay = () => {
   }, []);
 
   return (
-    <label className="text-gray-300 font-roboto text-xs ">
+    <label className="text-white font-roboto text-xs">
       {currentDate.day} {currentDate.month} {currentDate.year}
     </label>
   );

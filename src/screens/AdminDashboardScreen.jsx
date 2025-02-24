@@ -1,5 +1,4 @@
 import React from "react";
-import ChatComponent from "../components/ChatComponent";
 import Ribbon from "../components/Ribbon";
 import Navbar from "../components/Navbar";
 import { useState, useEffect } from "react";
@@ -13,7 +12,7 @@ import fetchPetCount from "../hooks/fetchPets";
 import { MdOutlinePets } from "react-icons/md";
 import { FaSyringe } from "react-icons/fa";
 import getUniqueVaccinatedPetCount from "../hooks/fetchPetVaccinated";
-
+import ActionAnalytics from "../components/ActionAnalytics";
 const AdminDashboard = ({ getUser }) => {
   const [userData, setUserData] = useState(null);
   const [usersCount, setUsersCount] = useState(null);
@@ -65,7 +64,7 @@ const AdminDashboard = ({ getUser }) => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#f8f4fc] w-screen h-auto overflow-y-auto relative px-6 py-8 flex flex-col gap-5">
+    <div className="min-h-screen bg-[#f8f4fc] w-screen h-auto overflow-y-auto relative px-6 pt-8 pb-32 flex flex-col gap-5">
       <Ribbon userData={userData} />
       <WeatherWidget />
       <div className="w-full h-auto flex flex-col justify-center gap-5 mt-5">
@@ -145,6 +144,7 @@ const AdminDashboard = ({ getUser }) => {
           </div>
         </div>
       </div>
+      <ActionAnalytics />
       <Navbar userData={userData} />
     </div>
   );
