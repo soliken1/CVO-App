@@ -19,9 +19,9 @@
 - [Kenneth James Macas - Developer](https://github.com/soliken1)
 
 ## Repository Links:
-CVO Android Repository Link: ***[Web repo](https://github.com/soliken1/CVO-App)***
+CVO Web Repository Link: ***[Web repo](https://github.com/soliken1/CVO-App)***
 
-CVO Web Repository Link: ***[Android repo](https://github.com/ajiwnl/CVO-Android)***
+CVO Android Repository Link: ***[Android repo](https://github.com/ajiwnl/CVO-Android)***
 
 CVO Python Repository Link: ***[Py repo](https://github.com/ajiwnl/CVO-faq)***
 
