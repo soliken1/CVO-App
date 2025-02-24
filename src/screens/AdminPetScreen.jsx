@@ -34,17 +34,17 @@ const AdminPetScreen = ({ getUser }) => {
         // Fetch all users first and store their names in a dictionary
         const usersCollection = collection(db, "users");
         const usersSnapshot = await getDocs(usersCollection);
-        
+
         const usersMap = {};
         usersSnapshot.forEach((doc) => {
           const userData = doc.data();
           usersMap[doc.id] = userData.name || "Unknown"; // Store UID as key and name as value
         });
-    
+
         // Fetch all pets
         const petsCollection = collection(db, "pets");
         const petsSnapshot = await getDocs(petsCollection);
-    
+
         const petsList = petsSnapshot.docs.map((petDoc) => {
           const petData = petDoc.data();
           return {
@@ -53,7 +53,7 @@ const AdminPetScreen = ({ getUser }) => {
             ownerName: usersMap[petData.ownerId] || "Unknown", // Match UID to Name
           };
         });
-    
+
         setPets(petsList);
         setIsLoading(false);
       } catch (error) {
@@ -84,13 +84,14 @@ const AdminPetScreen = ({ getUser }) => {
 
   const filterBySearch = (petList) => {
     if (!searchTerm) return petList;
-  
-    return petList.filter((pet) =>
-      pet.petName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      pet.ownerName.toLowerCase().includes(searchTerm.toLowerCase())
+
+    return petList.filter(
+      (pet) =>
+        pet.petName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        pet.ownerName.toLowerCase().includes(searchTerm.toLowerCase())
     );
   };
-  
+
   const displayedPets = () => {
     let filteredList = [...pets];
     filteredList = filterByVaccination(filteredList);
@@ -103,21 +104,23 @@ const AdminPetScreen = ({ getUser }) => {
   return (
     <div className="min-h-screen bg-[#f8f4fc] w-screen h-auto overflow-y-auto relative px-6 py-8 flex flex-col gap-5">
       <Ribbon userData={userData} />
-      <div className="w-full flex flex-col items-end h-auto mt-5 gap-5">
-        <div className="flex flex-row gap-2">
-          {/* <button
+      <div className="w-full flex items-end h-auto mt-5 justify-between">
+        <label className="text-xl font-semibold font-roboto">
+          User Feedback
+        </label>
+
+        {/* <button
             onClick={handleFilterCycle}
             className="px-2 min-w-16 h-8 cursor-pointer text-white rounded-lg text-xs bg-[#050419]"
           >
             {filter}
           </button> */}
-          <input
-            placeholder="Search Pets or Owner..."
-            className="w-40 h-8 rounded-lg border-gray-400 border px-2 text-xs bg-white"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
+        <input
+          placeholder="Search Pets or Owner..."
+          className="w-40 h-8 rounded-lg border-gray-400 border px-2 text-xs bg-white"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
       </div>
       <div className="flex flex-col gap-5 w-full h-full pb-60">
         {isloading ? (
