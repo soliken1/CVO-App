@@ -146,12 +146,12 @@ const AddPetModal = ({ getUser }) => {
               onChange={(e) => setPetBreed(e.target.value)}
               className="border p-2 rounded-md w-full h-10"
             />
-            <label className="font-bold mt-4 ">Pet Birthday</label>
+            <label className="font-bold mt-4">Pet Birthday</label>
             <input
               type="date"
               value={petBday}
               onChange={(e) => setPetBday(e.target.value)}
-              className="border p-2 rounded-md w-full h-10"
+              className="border px-2 py-4 rounded-md w-full h-10"
             />
             <label className="font-bold mt-4">Distinct Markings</label>
             <input
