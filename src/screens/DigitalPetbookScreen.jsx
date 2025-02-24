@@ -256,12 +256,15 @@ const DigitalPetbookScreen = ({ getUser }) => {
               )}
             </div>
 
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className=" px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-            >
-              Add Vaccination
-            </button>
+           {/* Only show the button if the user is an Admin */}
+            {userData?.userRole === "Admin" && (
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+              >
+                Add Vaccination
+              </button>
+            )}
           </div>
         </div>
       ) : (
