@@ -13,6 +13,7 @@ import { MdOutlinePets } from "react-icons/md";
 import { FaSyringe } from "react-icons/fa";
 import getUniqueVaccinatedPetCount from "../hooks/fetchPetVaccinated";
 import ActionAnalytics from "../components/ActionAnalytics";
+import RegisteredUsers from "../components/RegisteredUsers";
 const AdminDashboard = ({ getUser }) => {
   const [userData, setUserData] = useState(null);
   const [usersCount, setUsersCount] = useState(null);
@@ -145,6 +146,7 @@ const AdminDashboard = ({ getUser }) => {
         </div>
       </div>
       <ActionAnalytics />
+      <RegisteredUsers />
       <Navbar userData={userData} />
     </div>
   );
