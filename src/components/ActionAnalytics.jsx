@@ -5,6 +5,7 @@ import fetchActionCounts from "../hooks/fetchActionCounts";
 
 const ActionAnalytics = () => {
   const [chartData, setChartData] = useState(null);
+  const [topActions, setTopActions] = useState(new Set());
 
   const chartRef = useRef(null);
 
@@ -18,14 +19,24 @@ const ActionAnalytics = () => {
       if (Object.keys(actionCounts).length === 0) return;
 
       const labels = Object.keys(actionCounts).sort();
-      const actions = new Set();
+      const actionFrequency = {}; // Store total action counts
 
       labels.forEach((date) => {
-        Object.keys(actionCounts[date]).forEach((action) =>
-          actions.add(action)
-        );
+        Object.entries(actionCounts[date]).forEach(([action, count]) => {
+          actionFrequency[action] = (actionFrequency[action] || 0) + count;
+        });
       });
 
+      // Get top 3 most frequent actions
+      const sortedActions = Object.entries(actionFrequency)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3)
+        .map(([action]) => action);
+
+      setTopActions(new Set(sortedActions));
+
+      // Prepare datasets
+      const actions = new Set(Object.keys(actionFrequency)); // All unique actions
       const datasets = Array.from(actions).map((action) => ({
         label: action,
         data: labels.map((date) => actionCounts[date][action] || 0),
@@ -48,6 +59,7 @@ const ActionAnalytics = () => {
       }
     };
   }, []);
+
   return (
     <div className="w-full h-60 mt-4 flex flex-col gap-4">
       <label className="text-lg font-semibold font-roboto">
@@ -55,18 +67,23 @@ const ActionAnalytics = () => {
       </label>
       {chartData ? (
         <Line
-          ref={chartRef} // Attach the reference
+          ref={chartRef}
           data={chartData}
           options={{
             responsive: true,
             plugins: {
-              legend: { display: false },
+              legend: {
+                display: true,
+                labels: {
+                  filter: (legendItem) => topActions.has(legendItem.text),
+                },
+              },
             },
             scales: {
               x: { title: { display: true, text: "Date" } },
               y: {
                 beginAtZero: true,
-                title: { display: true, text: "Action" },
+                title: { display: true, text: "Action Count" },
               },
             },
           }}
