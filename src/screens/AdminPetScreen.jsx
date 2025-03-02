@@ -106,7 +106,7 @@ const AdminPetScreen = ({ getUser }) => {
       <Ribbon userData={userData} />
       <div className="w-full flex items-end h-auto mt-5 justify-between">
         <label className="text-xl font-semibold font-roboto">
-          User Feedback
+          Pet Lists
         </label>
 
         {/* <button
