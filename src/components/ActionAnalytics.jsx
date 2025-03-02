@@ -61,33 +61,39 @@ const ActionAnalytics = () => {
   }, []);
 
   return (
-    <div className="w-full h-60 mt-4 flex flex-col gap-4">
+    <div className="w-full mt-4 flex flex-col gap-1">
       <label className="text-lg font-semibold font-roboto">
         Specific User Activities
       </label>
       {chartData ? (
-        <Line
-          ref={chartRef}
-          data={chartData}
-          options={{
-            responsive: true,
-            plugins: {
-              legend: {
-                display: true,
-                labels: {
-                  filter: (legendItem) => topActions.has(legendItem.text),
+        <>
+          <label className=" text-xs text-gray-400 mb-2">
+            Top 3 Most Frequent Actions Labeled:
+          </label>
+          <Line
+            ref={chartRef}
+            height={200}
+            data={chartData}
+            options={{
+              responsive: true,
+              plugins: {
+                legend: {
+                  display: true,
+                  labels: {
+                    filter: (legendItem) => topActions.has(legendItem.text),
+                  },
                 },
               },
-            },
-            scales: {
-              x: { title: { display: true, text: "Date" } },
-              y: {
-                beginAtZero: true,
-                title: { display: true, text: "Action Count" },
+              scales: {
+                x: { title: { display: true, text: "Date" } },
+                y: {
+                  beginAtZero: true,
+                  title: { display: true, text: "Action Count" },
+                },
               },
-            },
-          }}
-        />
+            }}
+          />
+        </>
       ) : (
         <div className="w-full h-8 animate-pulse bg-[#050419] rounded-full duration-1000 mt-5"></div>
       )}
