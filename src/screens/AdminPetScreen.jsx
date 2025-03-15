@@ -43,25 +43,30 @@ const AdminPetScreen = ({ getUser }) => {
 
         // Fetch all pets
         const petsCollection = collection(db, "pets");
-        const petsSnapshot = await getDocs(petsCollection);
-
-        const petsList = petsSnapshot.docs.map((petDoc) => {
+      const unsubscribe = onSnapshot(petsCollection, (snapshot) => {
+        const petsList = snapshot.docs.map((petDoc) => {
           const petData = petDoc.data();
           return {
             id: petDoc.id,
             ...petData,
-            ownerName: usersMap[petData.ownerId] || "Unknown", // Match UID to Name
+            ownerName: usersMap[petData.ownerId] || "Unknown",
           };
         });
 
         setPets(petsList);
         setIsLoading(false);
-      } catch (error) {
-        console.error("Error fetching pets:", error);
-      }
-    };
-    fetchPets();
-  }, []);
+      });
+
+      return unsubscribe; // Unsubscribe when component unmounts
+    } catch (error) {
+      console.error("Error fetching pets:", error);
+    }
+  };
+
+  const unsubscribe = fetchPetsRealTime();
+
+  return () => unsubscribe(); // Cleanup on unmount
+}, []);
 
   const handleFilterCycle = () => {
     const filterOptions = ["All", "Vaccinated", "Unvaccinated"];
