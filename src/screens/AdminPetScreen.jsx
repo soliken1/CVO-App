@@ -5,7 +5,7 @@ import Navbar from "../components/Navbar";
 import { useState, useEffect } from "react";
 import fetchUser from "../hooks/fetchUser";
 import { db } from "../configs/firebaseConfigs";
-import { collection, getDocs, doc, getDoc } from "firebase/firestore";
+import { collection, getDocs, doc, getDoc, onSnapshot } from "firebase/firestore";
 import { Link } from "react-router-dom";
 
 const AdminPetScreen = ({ getUser }) => {
