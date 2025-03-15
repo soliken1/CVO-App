@@ -29,44 +29,51 @@ const AdminPetScreen = ({ getUser }) => {
   }, [getUser.uid]);
 
   useEffect(() => {
-    const fetchPets = async () => {
+    const fetchPetsRealTime = async () => {
       try {
-        // Fetch all users first and store their names in a dictionary
         const usersCollection = collection(db, "users");
         const usersSnapshot = await getDocs(usersCollection);
-
+  
         const usersMap = {};
         usersSnapshot.forEach((doc) => {
           const userData = doc.data();
-          usersMap[doc.id] = userData.name || "Unknown"; // Store UID as key and name as value
+          usersMap[doc.id] = userData.name || "Unknown";
         });
-
-        // Fetch all pets
+  
         const petsCollection = collection(db, "pets");
-      const unsubscribe = onSnapshot(petsCollection, (snapshot) => {
-        const petsList = snapshot.docs.map((petDoc) => {
-          const petData = petDoc.data();
-          return {
-            id: petDoc.id,
-            ...petData,
-            ownerName: usersMap[petData.ownerId] || "Unknown",
-          };
+  
+        // Store the unsubscribe function
+        const unsubscribe = onSnapshot(petsCollection, (snapshot) => {
+          const petsList = snapshot.docs.map((petDoc) => {
+            const petData = petDoc.data();
+            return {
+              id: petDoc.id,
+              ...petData,
+              ownerName: usersMap[petData.ownerId] || "Unknown",
+            };
+          });
+  
+          setPets(petsList);
+          setIsLoading(false);
         });
-
-        setPets(petsList);
-        setIsLoading(false);
-      });
-
-      return unsubscribe; // Unsubscribe when component unmounts
-    } catch (error) {
-      console.error("Error fetching pets:", error);
-    }
-  };
-
-  const unsubscribe = fetchPets();
-
-  return () => unsubscribe(); // Cleanup on unmount
-}, []);
+  
+        return unsubscribe; // Return the unsubscribe function here
+      } catch (error) {
+        console.error("Error fetching pets:", error);
+        return () => {}; // Return an empty function in case of error
+      }
+    };
+  
+    const unsubscribe = fetchPetsRealTime();
+  
+    // Only call unsubscribe if it's a function
+    return () => {
+      if (typeof unsubscribe === "function") {
+        unsubscribe();
+      }
+    };
+  }, []);
+  
 
   const handleFilterCycle = () => {
     const filterOptions = ["All", "Vaccinated", "Unvaccinated"];
