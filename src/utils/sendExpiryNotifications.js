@@ -25,7 +25,7 @@ const sendExpiryNotifications = async () => {
         continue;
       }
 
-      const expiryDateUTC = data.expiryDate.toDate();
+      const expiryDateUTC = new Date(data.expiryDate.toDate().toUTCString());
       expiryDateUTC.setHours(0, 0, 0, 0);
 
       if (expiryDateUTC.getTime() === tomorrow.getTime() && data.status === "pending") {

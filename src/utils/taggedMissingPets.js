@@ -1,4 +1,4 @@
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, updateDoc, doc } from "firebase/firestore";
 import { db } from "../configs/firebaseConfigs";
 import emailjs from "emailjs-com";
 import toast from "react-hot-toast";
@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 const handleMissingPet = async (petName, ownerId, missingPets, setMissingPets) => {
   try {
     const userRef = collection(db, "users");
+    const petRef = collection(db, "pets");
     const q = query(userRef, where("uid", "==", ownerId));
     const querySnapshot = await getDocs(q);
 
@@ -29,7 +30,21 @@ const handleMissingPet = async (petName, ownerId, missingPets, setMissingPets) =
 
       toast.success(message);
 
-      // Send Email when pet is tagged as missing
+      // ✅ Update the petStatus field on Firestore
+      const petQuery = query(petRef, where("ownerId", "==", ownerId), where("petName", "==", petName));
+      const petSnapshot = await getDocs(petQuery);
+
+      if (!petSnapshot.empty) {
+        const petDocId = petSnapshot.docs[0].id;
+
+        await updateDoc(doc(db, "pets", petDocId), {
+          petStatus: isMissing ? "missing" : "n/a",
+        });
+
+        console.log(`✅ Pet status updated to ${isMissing ? "missing" : "n/a"}`);
+      }
+
+      // ✅ Send email if missing
       if (isMissing) {
         const templateParams = {
           to_email: "ajplaygamesxd@yahoo.com",

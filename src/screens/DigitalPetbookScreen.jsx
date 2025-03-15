@@ -15,6 +15,8 @@ import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { db } from "../configs/firebaseConfigs";
 import fetchVaxStatus from "../hooks/fetchVaxStatus";
 import fetchOwner from "../hooks/fetchOwner";
+import EditPetModal from "../components/EditPetModal";
+
 
 const DigitalPetbookScreen = ({ getUser }) => {
   const { petId } = useParams();
@@ -24,6 +26,12 @@ const DigitalPetbookScreen = ({ getUser }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [ownerData, setOwnerData] = useState(null);
   const [userData, setUserData] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const handleClose = () => {
+    setIsEditModalOpen(false);
+  };
+  
+
 
   useEffect(() => {
     const fetchAndSetUserData = async () => {
@@ -52,42 +60,59 @@ const DigitalPetbookScreen = ({ getUser }) => {
   const handleAddVaccine = async (data) => {
     const vaxTimestamp = Timestamp.fromDate(new Date(data.vaccineDate));
     const expiryTimestamp = Timestamp.fromDate(new Date(data.expiryDate));
+  
     if (!petId) {
       console.error("No pet ID found.");
       return;
     }
-
+  
     try {
-      await addDoc(collection(db, "vaccinated"), {
-        petId,
-        vaccineDate: vaxTimestamp,
-        expiryDate: expiryTimestamp,
-        vaccineType: data.vaccineType,
-        createdAt: new Date(),
-      });
-
-      await addDoc(collection(db, "activity"), {
-        accessDate: Timestamp.now(),
-        action: "addvaccination",
-      });
-
-          
-    await addDoc(collection(db, "scheduledEmails"), {
-      email: ownerData.email,
-      name: ownerData.name || "User",
-      petName: petData.petName,
-      vaccineType: data.vaccineType,
-      expiryDate: expiryTimestamp,
-      status: "pending",
-    });
+      // ✅ Check if email already exists
+      const existingEmailRef = collection(db, "scheduledEmails");
+      const querySnapshot = await fetchVaxStatus(petId); // Custom hook to fetch vax status
       
-
+      const alreadyExists = querySnapshot.some(
+        (record) =>
+          record.vaccineType === data.vaccineType &&
+          record.status === "pending"
+      );
+  
+      if (!alreadyExists) {
+        // ✅ Add vaccination record
+        await addDoc(collection(db, "vaccinated"), {
+          petId,
+          vaccineDate: vaxTimestamp,
+          expiryDate: expiryTimestamp,
+          vaccineType: data.vaccineType,
+          createdAt: new Date(),
+        });
+  
+        // ✅ Add activity record
+        await addDoc(collection(db, "activity"), {
+          accessDate: Timestamp.now(),
+          action: "addvaccination",
+        });
+  
+        // ✅ Add scheduled email only if it doesn't exist
+        await addDoc(collection(db, "scheduledEmails"), {
+          email: ownerData.email,
+          name: ownerData.name || "User",
+          petName: petData.petName,
+          vaccineType: data.vaccineType,
+          expiryDate: expiryTimestamp,
+          status: "pending",
+        });
+      } else {
+        console.warn("Email already scheduled.");
+      }
+  
       window.location.reload();
       setIsModalOpen(false);
     } catch (error) {
       console.error("Error saving vaccination data:", error);
     }
   };
+  
   const filteredRecords = vaxRecords.filter((vax) =>
     vax.vaccineType.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -140,6 +165,12 @@ const DigitalPetbookScreen = ({ getUser }) => {
                   src={ownerData?.profileImage}
                   alt={ownerData?.name}
                 />
+                <button
+    onClick={() => setIsEditModalOpen(true)}
+    className="bg-blue-500 text-white px-4 py-2 rounded-md"
+  >
+    Edit Pet
+  </button>
               </div>
             ) : (
               <label></label>
@@ -272,6 +303,10 @@ const DigitalPetbookScreen = ({ getUser }) => {
         <div className="h-48 mt-5 rounded-lg bg-gradient-to-br shadow-md shadow-black from-[#141065] to-[#050419] animate-pulse duration-1000"></div>
       )}
       <Navbar userData={userData} />
+      {isEditModalOpen && (
+        <EditPetModal petDocName={petId} pet={petData} onClose={handleClose} />
+      )}
+
 
       {/* Modal */}
       <AddVaccineStatusModal

@@ -7,7 +7,7 @@ import fetchUser from "../hooks/fetchUser";
 import ChatComponent from "../components/ChatComponent";
 import AddPetModal from "../components/AddPetModal";
 import { db } from "../configs/firebaseConfigs";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, onSnapshot } from "firebase/firestore";
 import SplashScreen from "./SplashScreen";
 import { useNavigate } from "react-router-dom";
 import WeatherWidget from "../components/WeatherWidget";
@@ -49,22 +49,21 @@ const UserDashboard = ({ getUser }) => {
 
     const fetchUserPets = async () => {
       if (!getUser?.uid) return;
-
-      try {
-        const petsRef = collection(db, "pets");
-        const q = query(petsRef, where("ownerId", "==", getUser.uid));
-        const querySnapshot = await getDocs(q);
-
+    
+      const petsRef = collection(db, "pets");
+      const q = query(petsRef, where("ownerId", "==", getUser.uid));
+    
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
         const petsList = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
-
         setPets(petsList);
-      } catch (error) {
-        console.error("Error fetching pets:", error);
-      }
+      });
+    
+      return () => unsubscribe();
     };
+    
 
     fetchAndSetUserData();
     fetchUserPets();
@@ -118,14 +117,15 @@ const UserDashboard = ({ getUser }) => {
                     <FaEllipsisV className="text-gray-500" />
                   </button>
 
-                  <button
-                      onClick={() => handleMissingPet(pet.petName, pet.ownerId, missingPets, setMissingPets)}
-                    className={`absolute top-1/2 right-14 transform -translate-y-1/2 p-2 ${
-                      missingPets[pet.petName] ? "text-red-500" : "text-gray-500"
-                    }`}
-                  >
-                    <IoMdLocate size={20} />
-                  </button>
+              <button
+  onClick={() => handleMissingPet(pet.petName, pet.ownerId, missingPets, setMissingPets)}
+  className={`absolute top-1/2 right-14 transform -translate-y-1/2 p-2 ${
+    pet.petStatus === "missing" ? "text-red-500" : "text-gray-500"
+  }`}
+>
+  <IoMdLocate size={20} />
+</button>
+
 
                 </div>
               ))
