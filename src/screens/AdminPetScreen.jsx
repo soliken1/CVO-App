@@ -63,7 +63,7 @@ const AdminPetScreen = ({ getUser }) => {
     }
   };
 
-  const unsubscribe = fetchPetsRealTime();
+  const unsubscribe = fetchPets();
 
   return () => unsubscribe(); // Cleanup on unmount
 }, []);
