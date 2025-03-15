@@ -8,7 +8,7 @@ import Navbar from "../components/Navbar";
 import fetchPetById from "../hooks/fetchPet";
 import { LuCakeSlice } from "react-icons/lu";
 import { MdOutlinePets } from "react-icons/md";
-import { FaDog } from "react-icons/fa";
+import { FaDog, FaEdit } from "react-icons/fa";
 import { MdQuestionMark } from "react-icons/md";
 import AddVaccineStatusModal from "../components/AddVaccineStatusModal";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
@@ -165,12 +165,12 @@ const DigitalPetbookScreen = ({ getUser }) => {
                   src={ownerData?.profileImage}
                   alt={ownerData?.name}
                 />
-                <button
-    onClick={() => setIsEditModalOpen(true)}
-    className="bg-blue-500 text-white px-4 py-2 rounded-md"
-  >
-    Edit Pet
-  </button>
+              <button
+  onClick={() => setIsEditModalOpen(true)}
+  className="bg-blue-500 text-white px-4 py-2 rounded-md"
+>
+  <FaEdit size={20} />
+</button>
               </div>
             ) : (
               <label></label>
