@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Ribbon from "../components/Ribbon";
 import { Link } from "react-router-dom";
-import { FaArrowRight } from "react-icons/fa";
-import { FaEllipsisV } from "react-icons/fa";
+import { FaEllipsisV, FaFlag, FaArrowRight } from "react-icons/fa";
 import fetchUser from "../hooks/fetchUser";
 import ChatComponent from "../components/ChatComponent";
 import AddPetModal from "../components/AddPetModal";
@@ -13,6 +12,11 @@ import SplashScreen from "./SplashScreen";
 import { useNavigate } from "react-router-dom";
 import WeatherWidget from "../components/WeatherWidget";
 import EditDeletePetModal from "../components/EditDeletePetModal";
+import { IoMdLocate } from "react-icons/io";
+import toast, { Toaster } from "react-hot-toast";
+import handleMissingPet from "../utils/taggedMissingPets";
+
+
 
 const UserDashboard = ({ getUser }) => {
   const navigate = useNavigate();
@@ -21,6 +25,9 @@ const UserDashboard = ({ getUser }) => {
   const [pets, setPets] = useState([]);
   const [selectedPet, setSelectedPet] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [missingPets, setMissingPets] = useState({});
+
+
 
   useEffect(() => {
     const fetchAndSetUserData = async () => {
@@ -72,8 +79,11 @@ const UserDashboard = ({ getUser }) => {
     setShowModal(true);
   };
 
+
+
   return (
     <div className="min-h-screen bg-[#f8f4fc] w-screen h-auto overflow-y-auto relative px-6 py-8 flex flex-col gap-5">
+                <Toaster position="bottom-center"/>
       <Ribbon userData={userData} />
       <ChatComponent />
       <WeatherWidget />
@@ -107,12 +117,21 @@ const UserDashboard = ({ getUser }) => {
                   >
                     <FaEllipsisV className="text-gray-500" />
                   </button>
+
+                  <button
+                      onClick={() => handleMissingPet(pet.petName, pet.ownerId, missingPets, setMissingPets)}
+                    className={`absolute top-1/2 right-14 transform -translate-y-1/2 p-2 ${
+                      missingPets[pet.petName] ? "text-red-500" : "text-gray-500"
+                    }`}
+                  >
+                    <IoMdLocate size={20} />
+                  </button>
+
                 </div>
               ))
             ) : (
               <p className="text-gray-500 text-sm">No pets found.</p>
             )}
-
             {showModal && (
               <EditDeletePetModal
                 pet={selectedPet}
