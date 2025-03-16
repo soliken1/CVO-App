@@ -16,6 +16,10 @@ import { db } from "../configs/firebaseConfigs";
 import fetchVaxStatus from "../hooks/fetchVaxStatus";
 import fetchOwner from "../hooks/fetchOwner";
 import EditPetModal from "../components/EditPetModal";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import GeneratePDF from "../utils/generatePDF"; 
+import uploadPDFToCloudinary from "../utils/uploadPDFToCloudinary";
+import sendEmailWithLink from "../utils/sendEmailWithLink";
 
 
 const DigitalPetbookScreen = ({ getUser }) => {
@@ -31,8 +35,6 @@ const DigitalPetbookScreen = ({ getUser }) => {
     setIsEditModalOpen(false);
   };
   
-
-
   useEffect(() => {
     const fetchAndSetUserData = async () => {
       try {
@@ -116,6 +118,17 @@ const DigitalPetbookScreen = ({ getUser }) => {
   const filteredRecords = vaxRecords.filter((vax) =>
     vax.vaccineType.toLowerCase().includes(searchQuery.toLowerCase())
   );
+  
+  const handleSendEmail = async () => {
+    try {
+      const pdfURL = await uploadPDFToCloudinary(petData, ownerData, GeneratePDF);
+      await sendEmailWithLink(ownerData.email, ownerData.name, pdfURL);
+      alert("📩 Email sent successfully!");
+    } catch (error) {
+      console.error("Email sending failed:", error);
+    }
+  };
+
 
   useEffect(() => {
     const getVaxData = async () => {
@@ -158,7 +171,7 @@ const DigitalPetbookScreen = ({ getUser }) => {
             {userData.userRole === "Admin" ? (
               <div className="flex flex-row gap-2 items-center">
                 <label className="text-gray-500 text-xs">
-                  Onwed by {ownerData?.name}
+                  Owned by {ownerData?.name}
                 </label>
                 <img
                   className="w-6 h-6 rounded-full object-cover"
@@ -295,7 +308,28 @@ const DigitalPetbookScreen = ({ getUser }) => {
               >
                 Add Vaccination
               </button>
+              
             )}
+
+{userData?.userRole === "Admin" && (
+  <div className="flex justify-center">
+  <PDFDownloadLink
+    document={<GeneratePDF petData={petData} ownerData={ownerData} />}
+    fileName={`${petData?.petName}_Travel_Certificate.pdf`}
+    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-green-700"
+  >
+    Download Certificate
+  </PDFDownloadLink>
+
+  <button
+          onClick={handleSendEmail}
+          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700"
+        >
+          Send to Owner's Email
+        </button>
+</div>
+)}
+
           </div>
         </div>
       ) : (

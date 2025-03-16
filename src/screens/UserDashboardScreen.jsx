@@ -118,7 +118,7 @@ const UserDashboard = ({ getUser }) => {
                   </button>
 
               <button
-  onClick={() => handleMissingPet(pet.petName, pet.ownerId, missingPets, setMissingPets)}
+  onClick={() => handleMissingPet(pet.petName, pet.petBreed, pet.petSpecies, pet.ownerId, missingPets, setMissingPets)}
   className={`absolute top-1/2 right-14 transform -translate-y-1/2 p-2 ${
     pet.petStatus === "missing" ? "text-red-500" : "text-gray-500"
   }`}
