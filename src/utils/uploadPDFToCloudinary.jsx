@@ -9,7 +9,7 @@ const uploadPDFToCloudinary = async (petData, ownerData, GeneratePDF) => {
   formData.append("upload_preset", "pet_certificate");
   formData.append("folder", "pet_certificates");
   formData.append("resource_type", "raw");
-  formData.append("public_id", `${petData.petName}_certificate.pdf`); 
+  formData.append("public_id", `${petData.petName}_certificate`); 
 
 
   const response = await fetch(
@@ -22,7 +22,7 @@ const uploadPDFToCloudinary = async (petData, ownerData, GeneratePDF) => {
 
   const data = await response.json();
   console.log("Cloudinary Response:", data);
-  return data.secure_url.replace('/raw/upload/', '/upload/fl_attachment:pdf/');
+  return data.secure_url;
 };
 
 export default uploadPDFToCloudinary;
