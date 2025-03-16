@@ -47,7 +47,7 @@ const handleMissingPet = async (petName, petBreed, petSpecies, ownerId, missingP
       // ✅ Send email if missing
       if (isMissing) {
         const templateParams = {
-          to_email: "ajplaygamesxd@yahoo.com",
+          to_email: "ursabiatreshia112@gmail.com",
           to_name: "CVO Admin",
           message: `This pet "${petName}" a species of "${petSpecies}" and a breed of "${[petBreed]}"is tagged as missing by the owner ${ownerName} as of ${new Date().toLocaleDateString()}`,
         };
