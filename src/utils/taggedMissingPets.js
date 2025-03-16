@@ -3,7 +3,7 @@ import { db } from "../configs/firebaseConfigs";
 import emailjs from "emailjs-com";
 import toast from "react-hot-toast";
 
-const handleMissingPet = async (petName, ownerId, missingPets, setMissingPets) => {
+const handleMissingPet = async (petName, petBreed, petSpecies, ownerId, missingPets, setMissingPets) => {
   try {
     const userRef = collection(db, "users");
     const petRef = collection(db, "pets");
@@ -49,7 +49,7 @@ const handleMissingPet = async (petName, ownerId, missingPets, setMissingPets) =
         const templateParams = {
           to_email: "ajplaygamesxd@yahoo.com",
           to_name: "CVO Admin",
-          message: `This pet "${petName}" is tagged as missing by the owner ${ownerName} as of ${new Date().toLocaleDateString()}`,
+          message: `This pet "${petName}" a species of "${petSpecies}" and a breed of "${[petBreed]}"is tagged as missing by the owner ${ownerName} as of ${new Date().toLocaleDateString()}`,
         };
 
         await emailjs.send(
