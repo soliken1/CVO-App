@@ -17,10 +17,9 @@ import fetchVaxStatus from "../hooks/fetchVaxStatus";
 import fetchOwner from "../hooks/fetchOwner";
 import EditPetModal from "../components/EditPetModal";
 import { PDFDownloadLink } from "@react-pdf/renderer";
-import GeneratePDF from "../utils/generatePDF"; 
+import GeneratePDF from "../utils/generatePDF";
 import uploadPDFToCloudinary from "../utils/uploadPDFToCloudinary";
 import sendEmailWithLink from "../utils/sendEmailWithLink";
-
 
 const DigitalPetbookScreen = ({ getUser }) => {
   const { petId } = useParams();
@@ -34,7 +33,7 @@ const DigitalPetbookScreen = ({ getUser }) => {
   const handleClose = () => {
     setIsEditModalOpen(false);
   };
-  
+
   useEffect(() => {
     const fetchAndSetUserData = async () => {
       try {
@@ -62,23 +61,22 @@ const DigitalPetbookScreen = ({ getUser }) => {
   const handleAddVaccine = async (data) => {
     const vaxTimestamp = Timestamp.fromDate(new Date(data.vaccineDate));
     const expiryTimestamp = Timestamp.fromDate(new Date(data.expiryDate));
-  
+
     if (!petId) {
       console.error("No pet ID found.");
       return;
     }
-  
+
     try {
       // ✅ Check if email already exists
       const existingEmailRef = collection(db, "scheduledEmails");
       const querySnapshot = await fetchVaxStatus(petId); // Custom hook to fetch vax status
-      
+
       const alreadyExists = querySnapshot.some(
         (record) =>
-          record.vaccineType === data.vaccineType &&
-          record.status === "pending"
+          record.vaccineType === data.vaccineType && record.status === "pending"
       );
-  
+
       if (!alreadyExists) {
         // ✅ Add vaccination record
         await addDoc(collection(db, "vaccinated"), {
@@ -88,13 +86,13 @@ const DigitalPetbookScreen = ({ getUser }) => {
           vaccineType: data.vaccineType,
           createdAt: new Date(),
         });
-  
+
         // ✅ Add activity record
         await addDoc(collection(db, "activity"), {
           accessDate: Timestamp.now(),
           action: "addvaccination",
         });
-  
+
         // ✅ Add scheduled email only if it doesn't exist
         await addDoc(collection(db, "scheduledEmails"), {
           email: ownerData.email,
@@ -107,21 +105,25 @@ const DigitalPetbookScreen = ({ getUser }) => {
       } else {
         console.warn("Email already scheduled.");
       }
-  
+
       window.location.reload();
       setIsModalOpen(false);
     } catch (error) {
       console.error("Error saving vaccination data:", error);
     }
   };
-  
+
   const filteredRecords = vaxRecords.filter((vax) =>
     vax.vaccineType.toLowerCase().includes(searchQuery.toLowerCase())
   );
-  
+
   const handleSendEmail = async () => {
     try {
-      const pdfURL = await uploadPDFToCloudinary(petData, ownerData, GeneratePDF);
+      const pdfURL = await uploadPDFToCloudinary(
+        petData,
+        ownerData,
+        GeneratePDF
+      );
       await sendEmailWithLink(ownerData.email, ownerData.name, pdfURL);
       alert("📩 Email sent successfully!");
     } catch (error) {
@@ -129,10 +131,10 @@ const DigitalPetbookScreen = ({ getUser }) => {
     }
   };
 
-
   useEffect(() => {
     const getVaxData = async () => {
       const records = await fetchVaxStatus(petId);
+      console.log[records];
       setVaxRecords(records);
     };
 
@@ -178,12 +180,12 @@ const DigitalPetbookScreen = ({ getUser }) => {
                   src={ownerData?.profileImage}
                   alt={ownerData?.name}
                 />
-              <button
-  onClick={() => setIsEditModalOpen(true)}
-  className="bg-blue-500 text-white px-4 py-2 rounded-md"
->
-  <FaEdit size={20} />
-</button>
+                <button
+                  onClick={() => setIsEditModalOpen(true)}
+                  className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                >
+                  <FaEdit size={20} />
+                </button>
               </div>
             ) : (
               <label></label>
@@ -277,14 +279,14 @@ const DigitalPetbookScreen = ({ getUser }) => {
                         className="flex justify-between border-b pb-2"
                       >
                         <span className="w-1/3 text-sm font-medium text-gray-700">
-                        {vax.vaccineDate instanceof Timestamp 
-                        ? vax.vaccineDate.toDate().toLocaleDateString() 
-                        : new Date(vax.vaccineDate).toLocaleDateString()}
+                          {vax.vaccineDate instanceof Timestamp
+                            ? vax.vaccineDate.toDate().toLocaleDateString()
+                            : new Date(vax.vaccineDate).toLocaleDateString()}
                         </span>
                         <span className="w-1/3 text-sm font-medium text-gray-700">
-                        {vax.expiryDate instanceof Timestamp 
-                         ? vax.expiryDate.toDate().toLocaleDateString() 
-                        : new Date(vax.expiryDate).toLocaleDateString()}
+                          {vax.expiryDate instanceof Timestamp
+                            ? vax.expiryDate.toDate().toLocaleDateString()
+                            : new Date(vax.expiryDate).toLocaleDateString()}
                         </span>
                         <span className="w-1/3 text-sm font-semibold text-green-700">
                           {vax.vaccineType}
@@ -300,7 +302,7 @@ const DigitalPetbookScreen = ({ getUser }) => {
               )}
             </div>
 
-           {/* Only show the button if the user is an Admin */}
+            {/* Only show the button if the user is an Admin */}
             {userData?.userRole === "Admin" && (
               <button
                 onClick={() => setIsModalOpen(true)}
@@ -308,28 +310,32 @@ const DigitalPetbookScreen = ({ getUser }) => {
               >
                 Add Vaccination
               </button>
-              
             )}
 
-{userData?.userRole === "Admin" && (
-  <div className="flex justify-center">
-  <PDFDownloadLink
-    document={<GeneratePDF petData={petData} ownerData={ownerData} />}
-    fileName={`${petData?.petName}_Travel_Certificate.pdf`}
-    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-green-700"
-  >
-    Download Certificate
-  </PDFDownloadLink>
+            {userData?.userRole === "Admin" && (
+              <div className="flex justify-center gap-5 text-center">
+                <PDFDownloadLink
+                  document={
+                    <GeneratePDF
+                      petData={petData}
+                      ownerData={ownerData}
+                      vaxRecords={vaxRecords[0]}
+                    />
+                  }
+                  fileName={`${petData?.petName}_Travel_Certificate.pdf`}
+                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-green-700"
+                >
+                  Download Certificate
+                </PDFDownloadLink>
 
-  <button
-          onClick={handleSendEmail}
-          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700"
-        >
-          Send to Owner's Email
-        </button>
-</div>
-)}
-
+                <button
+                  onClick={handleSendEmail}
+                  className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700"
+                >
+                  Send to Owner's Email
+                </button>
+              </div>
+            )}
           </div>
         </div>
       ) : (
@@ -340,7 +346,6 @@ const DigitalPetbookScreen = ({ getUser }) => {
       {isEditModalOpen && (
         <EditPetModal petDocName={petId} pet={petData} onClose={handleClose} />
       )}
-
 
       {/* Modal */}
       <AddVaccineStatusModal

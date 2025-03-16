@@ -11,6 +11,14 @@ const ChatComponent = () => {
   const [greeted, setGreeted] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
+  const inputRef = useRef(null);
+  const chatBoxRef = useRef(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      inputRef.current?.focus(); // Focus input field when chat opens
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -23,38 +31,36 @@ const ChatComponent = () => {
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
 
-    // Show typing indicator
     setIsTyping(true);
 
-    // Create an AbortController to handle timeouts
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 seconds timeout
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
 
     try {
       const response = await fetch("https://cvo-furbot.vercel.app/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: input }),
-        signal: controller.signal, // Attach the abort signal
+        signal: controller.signal,
       });
 
-      clearTimeout(timeoutId); // Clear timeout if request succeeds
+      clearTimeout(timeoutId);
 
-      if (!response.ok) {
+      if (!response.ok)
         throw new Error(`Server responded with ${response.status}`);
-      }
 
       const data = await response.json();
 
       setTimeout(() => {
-        setIsTyping(false); // Hide typing indicator
+        setIsTyping(false);
         if (data.response) {
-          const botMessage = { text: data.response, sender: "bot" };
-          setMessages((prev) => [...prev, botMessage]);
+          setMessages((prev) => [
+            ...prev,
+            { text: data.response, sender: "bot" },
+          ]);
         }
       }, 1500);
 
-      // Log activity to Firestore
       await addDoc(collection(db, "activity"), {
         accessDate: Timestamp.now(),
         action: "chatbot",
@@ -62,8 +68,6 @@ const ChatComponent = () => {
     } catch (error) {
       console.error("Error fetching response:", error);
       setIsTyping(false);
-
-      // Show a friendly error message to the user
       setMessages((prev) => [
         ...prev,
         {
@@ -75,14 +79,14 @@ const ChatComponent = () => {
   };
 
   const handleChatOpen = () => {
+    setIsOpen((prev) => !prev);
     if (!isOpen) {
-      setIsOpen(true);
-
+      setTimeout(() => inputRef.current?.focus(), 100); // Focus input field when opened
       if (!greeted) {
         setGreeted(true);
         setTimeout(() => {
-          setMessages((prevMessages) => [
-            ...prevMessages,
+          setMessages((prev) => [
+            ...prev,
             {
               text: "Hi, I'm Furbot, the Mandaue City Veterinary Office info bot. How may I help you today?",
               sender: "bot",
@@ -90,8 +94,6 @@ const ChatComponent = () => {
           ]);
         }, 1000);
       }
-    } else {
-      setIsOpen(false);
     }
   };
 
@@ -113,10 +115,13 @@ const ChatComponent = () => {
 
       {/* Chat Box */}
       {isOpen && (
-        <div className="md:right-10 w-full max-w-[325px] mt-2 bg-white shadow-lg rounded-lg flex flex-col overflow-hidden">
+        <div
+          ref={chatBoxRef}
+          tabIndex={0}
+          className="md:right-10 w-full max-w-[325px] mt-2 bg-white shadow-lg rounded-lg flex flex-col overflow-hidden"
+        >
           {/* Chat Header */}
           <div className="bg-[#050419] text-white p-3 flex justify-between items-center">
-            {/* Bot Image */}
             <div className="flex items-center gap-2">
               <img
                 src={Furbot_Logo}
@@ -125,8 +130,6 @@ const ChatComponent = () => {
               />
               <span>CVO Info Bot (Furbot)</span>
             </div>
-
-            {/* Close Button */}
             <button onClick={() => setIsOpen(false)} className="text-xl">
               ✖
             </button>
@@ -146,21 +149,18 @@ const ChatComponent = () => {
                 {msg.text}
               </div>
             ))}
-
-            {/* Typing Indicator */}
             {isTyping && (
               <div className="self-end bg-gray-300 text-black p-2 rounded-lg text-sm max-w-[80%]">
-                <span className="font-semibold">Furbot is thinking</span>
-                <span className="dots">...</span>
+                Furbot is thinking...
               </div>
             )}
-
             <div ref={messagesEndRef} />
           </div>
 
           {/* Input Field */}
           <div className="flex py-2 px-1 w-full gap-2 justify-evenly border-t bg-white">
             <input
+              ref={inputRef}
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
