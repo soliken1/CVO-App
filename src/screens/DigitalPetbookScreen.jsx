@@ -20,6 +20,8 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import GeneratePDF from "../utils/generatePDF"; 
 import uploadPDFToCloudinary from "../utils/uploadPDFToCloudinary";
 import sendEmailWithLink from "../utils/sendEmailWithLink";
+import toast, { Toaster } from "react-hot-toast";
+
 
 
 const DigitalPetbookScreen = ({ getUser }) => {
@@ -123,7 +125,8 @@ const DigitalPetbookScreen = ({ getUser }) => {
     try {
       const pdfURL = await uploadPDFToCloudinary(petData, ownerData, GeneratePDF);
       await sendEmailWithLink(ownerData.email, ownerData.name, pdfURL);
-      alert("📩 Email sent successfully!");
+      toast.success("📩 Email sent successfully with the PDF!"); // Show toast on success
+      console.log("📩 Email sent successfully!");
     } catch (error) {
       console.error("Email sending failed:", error);
     }
@@ -154,6 +157,7 @@ const DigitalPetbookScreen = ({ getUser }) => {
   return (
     /*Parent Div*/
     <div className="h-screen w-screen flex flex-col items-center overflow-y-auto relative px-6 py-8">
+       <Toaster position="bottom-center"/>
       <Ribbon userData={userData} />
       {petData ? (
         /*The Petbook Section*/
