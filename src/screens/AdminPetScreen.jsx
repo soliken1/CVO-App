@@ -5,7 +5,13 @@ import Navbar from "../components/Navbar";
 import { useState, useEffect } from "react";
 import fetchUser from "../hooks/fetchUser";
 import { db } from "../configs/firebaseConfigs";
-import { collection, getDocs, doc, getDoc, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  doc,
+  getDoc,
+  onSnapshot,
+} from "firebase/firestore";
 import { Link } from "react-router-dom";
 
 const AdminPetScreen = ({ getUser }) => {
@@ -33,15 +39,15 @@ const AdminPetScreen = ({ getUser }) => {
       try {
         const usersCollection = collection(db, "users");
         const usersSnapshot = await getDocs(usersCollection);
-  
+
         const usersMap = {};
         usersSnapshot.forEach((doc) => {
           const userData = doc.data();
           usersMap[doc.id] = userData.name || "Unknown";
         });
-  
+
         const petsCollection = collection(db, "pets");
-  
+
         // Store the unsubscribe function
         const unsubscribe = onSnapshot(petsCollection, (snapshot) => {
           const petsList = snapshot.docs.map((petDoc) => {
@@ -52,20 +58,20 @@ const AdminPetScreen = ({ getUser }) => {
               ownerName: usersMap[petData.ownerId] || "Unknown",
             };
           });
-  
+
           setPets(petsList);
           setIsLoading(false);
         });
-  
+
         return unsubscribe; // Return the unsubscribe function here
       } catch (error) {
         console.error("Error fetching pets:", error);
         return () => {}; // Return an empty function in case of error
       }
     };
-  
+
     const unsubscribe = fetchPetsRealTime();
-  
+
     // Only call unsubscribe if it's a function
     return () => {
       if (typeof unsubscribe === "function") {
@@ -73,7 +79,6 @@ const AdminPetScreen = ({ getUser }) => {
       }
     };
   }, []);
-  
 
   const handleFilterCycle = () => {
     const filterOptions = ["All", "Vaccinated", "Unvaccinated"];
@@ -117,22 +122,21 @@ const AdminPetScreen = ({ getUser }) => {
     <div className="min-h-screen bg-[#f8f4fc] w-screen h-auto overflow-y-auto relative px-6 py-8 flex flex-col gap-5">
       <Ribbon userData={userData} />
       <div className="w-full flex items-end h-auto mt-5 justify-between">
-        <label className="text-xl font-semibold font-roboto">
-          Pet Lists
-        </label>
-
-        {/* <button
-            onClick={handleFilterCycle}
-            className="px-2 min-w-16 h-8 cursor-pointer text-white rounded-lg text-xs bg-[#050419]"
+        <label className="text-xl font-semibold font-roboto">Pet Lists</label>
+        <div className="flex flex-row gap-5">
+          <Link
+            className="px-2 cursor-pointer text-white flex text-center justify-center items-center rounded-lg text-xs bg-[#050419]"
+            to="/microchipped"
           >
-            {filter}
-          </button> */}
-        <input
-          placeholder="Search Pets or Owner..."
-          className="w-40 h-8 rounded-lg border-gray-400 border px-2 text-xs bg-white"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+            Microhipped Pets
+          </Link>
+          <input
+            placeholder="Search Pets or Owner..."
+            className="w-40 h-8 rounded-lg border-gray-400 border px-2 text-xs bg-white"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
       </div>
       <div className="flex flex-col gap-5 w-full h-full pb-60">
         {isloading ? (
@@ -158,7 +162,6 @@ const AdminPetScreen = ({ getUser }) => {
                   </span>
                 )}
               </div>
-             
             </Link>
           ))
         ) : (
