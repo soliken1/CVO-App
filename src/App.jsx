@@ -17,6 +17,7 @@ import ForgotPasswordScreen from "./screens/ForgotPasswordScreen.jsx";
 import AdminPetScreen from "./screens/AdminPetScreen.jsx";
 import InfoScreen from "./screens/InfoScreen.jsx";
 import FeedbackScreen from "./screens/FeedbackScreen.jsx";
+import MicrochippedPetsScreen from "./screens/MicrochippedPetsScreen.jsx";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -111,6 +112,16 @@ export default function App() {
               path="/settings"
               element={
                 <SettingsScreen getUser={getUser} onLogout={handleLogout} />
+              }
+            />
+
+            <Route
+              path="/microchipped"
+              element={
+                <MicrochippedPetsScreen
+                  getUser={getUser}
+                  onLogout={handleLogout}
+                />
               }
             />
 
